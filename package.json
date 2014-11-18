@@ -15,6 +15,9 @@
     "type": "git",
     "url": "https://github.com/mpneuried/redis-heartbeat.git"
   },
+  "scripts": {
+    "test": "grunt test"
+  },
   "license": "MIT",
   "dependencies": {
     "mpbasic": "0.0.x",
