@@ -1,3 +1,5 @@
+os:
+- linux
 services:
 - redis-server
 language: node_js

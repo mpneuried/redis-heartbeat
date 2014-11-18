@@ -20,8 +20,8 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 ## Initialize
 
 ```
-	var Heartbeat = require( "heartbeat" );
-	new Heartbeat( { name: "FOO", identifier: "http://www.bar.biz:4223" } )
+	var Heartbeat = require( "redis-heartbeat" );
+	new Heartbeat( { name: "FOO", identifier: "http://www.bar.biz:4223" } );
 ```
 
 **Options** 
