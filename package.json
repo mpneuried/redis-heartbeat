@@ -18,6 +18,9 @@
   "scripts": {
     "test": "grunt test"
   },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
   "license": "MIT",
   "dependencies": {
     "mpbasic": "0.0.x",
