@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>README.md</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="doc-style.css" />
+  <script src="doc-filelist.js"></script>
+  <script>
+    var relativeDir = "", thisFile = "README.md", defaultSidebar = true;
+  </script>
+  <script src="doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#redis-heartbeat">redis-heartbeat</a>
+      </div>
+      <div class="heading h2">
+        <a href="#install">Install</a>
+      </div>
+      <div class="heading h2">
+        <a href="#initialize">Initialize</a>
+      </div>
+      <div class="heading h2">
+        <a href="#events">Events</a>
+      </div>
+      <div class="heading h4">
+        <a href="#started">started</a>
+      </div>
+      <div class="heading h4">
+        <a href="#beforeheartbeat">beforeHeartbeat</a>
+      </div>
+      <div class="heading h4">
+        <a href="#beforemetric">beforeMetric</a>
+      </div>
+      <div class="heading h4">
+        <a href="#connected">connected</a>
+      </div>
+      <div class="heading h4">
+        <a href="#disconnect">disconnect</a>
+      </div>
+      <div class="heading h4">
+        <a href="#redis%3Aerror">redis:error</a>
+      </div>
+      <div class="heading h2">
+        <a href="#todo">TODO</a>
+      </div>
+      <div class="heading h2">
+        <a href="#release%20history">Release History</a>
+      </div>
+      <div class="heading h2">
+        <a href="#the%20mit%20license%20(mit)">The MIT License (MIT)</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="docs markdown">
+<div class="pilwrap" id="redis-heartbeat">
+  <h1>
+    <a href="#redis-heartbeat" name="redis-heartbeat" class="pilcrow">&#182;</a>
+    redis-heartbeat
+  </h1>
+</div>
+
+
+<p><a href="http://travis-ci.org/mpneuried/redis-heartbeat"><img src="https://secure.travis-ci.org/mpneuried/redis-heartbeat.png?branch=master" alt="Build Status" title="" /></a>
+<a href="https://david-dm.org/mpneuried/redis-heartbeat"><img src="https://david-dm.org/mpneuried/redis-heartbeat.png" alt="Build Status" title="" /></a>
+<a href="http://badge.fury.io/js/redis-heartbeat"><img src="https://badge.fury.io/js/redis-heartbeat.png" alt="NPM version" title="" /></a></p>
+
+<p>Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems</p>
+
+<p><em>Written in coffee-script</em></p>
+
+<p><strong>INFO: all examples are written in coffee-script</strong></p>
+
+
+<div class="pilwrap" id="install">
+  <h2>
+    <a href="#install" name="install" class="pilcrow">&#182;</a>
+    Install
+  </h2>
+</div>
+
+
+<div class='highlight'><pre><code language=''>  npm install redis-heartbeat
+</code></pre></div>
+
+
+<div class="pilwrap" id="initialize">
+  <h2>
+    <a href="#initialize" name="initialize" class="pilcrow">&#182;</a>
+    Initialize
+  </h2>
+</div>
+
+
+<div class='highlight'><pre><code language=''>    var Heartbeat = require( "heartbeat" );
+    new Heartbeat( { name: "FOO", identifier: "http://www.bar.biz:4223" } )
+</code></pre></div>
+
+<p><strong>Options</strong> </p>
+
+<ul>
+<li><strong>name</strong> : <em>( <code>String</code> required )</em> The name of this current service group. E.g. "restservice"</li>
+<li><strong>identifier</strong> : <em>( <code>String|Function</code> required )</em> The identifier of the current server. E.g. "<a href='http://api.myresthost.com:8080'>http://api.myresthost.com:8080</a>". If also possible to pass in a function that returnes the identifier.</li>
+<li><strong>intervalHeartbeat</strong> : <em>( <code>Number</code> optional: default = <code>5</code> )</em> Min. interval time ( in seconds ) to send the heartbeat</li>
+<li><strong>heartbeatKey</strong> : <em>( <code>String</code> optional: default = <code>HB</code> )</em> Redis key to write the heartbeat. This could be prefixed by <code>redisprefix</code>.</li>
+<li><strong>intervalMetrics</strong> : <em>( <code>Number</code> optional: default = <code>60</code> )</em> Min. interval time ( in seconds ) to send the metrics. If set <code>&lt;= 0</code> no metrics will be written</li>
+<li><strong>metricsKey</strong> : <em>( <code>String</code> optional: default = <code>HB:METRICS</code> )</em> Redis key to write the machine/process metrics. If this is set to <code>null</code> no mertics will be written to redis. This could be prefixed by <code>redisprefix</code>.</li>
+<li><strong>useRedisTime</strong> : <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Use redis server time or us the own machine time</li>
+<li><strong>host</strong> : <em>( <code>String</code> optional: default = <code>localhost</code> )</em> Redis host name</li>
+<li><strong>port</strong> : <em>( <code>Number</code> optional: default = <code>6379</code> )</em> Redis port</li>
+<li><strong>options</strong> : <em>( <code>Object</code> optional: default = <code>{}</code> )</em> Redis options</li>
+<li><strong>client</strong> : <em>( <code>RedicClient</code> optional: default = <code>null</code> )</em> It also possible to pass in a already existing redis client instance. In this case the options <code>host</code>, <code>port</code> and <code>options</code> ar ignored.</li>
+<li><strong>redisprefix</strong> : <em>( <code>String</code> optional: default = <code>{}</code> )</em> A general redis key prefix</li>
+</ul>
+
+
+<div class="pilwrap" id="events">
+  <h2>
+    <a href="#events" name="events" class="pilcrow">&#182;</a>
+    Events
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id="started">
+  <h4>
+    <a href="#started" name="started" class="pilcrow">&#182;</a>
+    <code>started</code>
+  </h4>
+</div>
+
+
+<p>Emitted on start of the intervals</p>
+
+
+<div class="pilwrap" id="beforeheartbeat">
+  <h4>
+    <a href="#beforeheartbeat" name="beforeheartbeat" class="pilcrow">&#182;</a>
+    <code>beforeHeartbeat</code>
+  </h4>
+</div>
+
+
+<p>Emitted before heartbeat write.
+With this event it's possible to change the heartbeat content in operation</p>
+
+<p><strong>Arguments</strong> </p>
+
+<ul>
+<li><strong>identifier</strong> : <em>( <code>String</code> )</em> The current identifier</li>
+</ul>
+
+
+<div class="pilwrap" id="beforemetric">
+  <h4>
+    <a href="#beforemetric" name="beforemetric" class="pilcrow">&#182;</a>
+    <code>beforeMetric</code>
+  </h4>
+</div>
+
+
+<p>Emitted before metric write.
+With this event it's possible to change the heartbeat content in operation</p>
+
+<p><strong>Arguments</strong> </p>
+
+<ul>
+<li><strong>metric</strong> : <em>( <code>Object</code> )</em> The current machine/process metrics
+<ul><li><strong>metric.g_cpu</strong> : <em>( <code>Number</code> )</em> The avarage machine cpu useage for the last minute in percent</li>
+<li><strong>metric.g_mem</strong> : <em>( <code>Number</code> )</em> The current machine memory useage in percent.</li>
+<li><strong>metric.g_memtotal</strong> : <em>( <code>Number</code> )</em> The current machine memory useage in bytes.</li>
+<li><strong>metric.p_id</strong> : <em>( <code>Number</code> )</em> The current process id.</li>
+<li><strong>metric.p_uptime</strong> : <em>( <code>Number</code> )</em> The current process uptime in seconds.</li>
+<li><strong>metric.p_mem</strong> : <em>( <code>Object</code> )</em> The current machine memory useage of the process.
+<ul><li><strong>metric.p_mem.heapTotal</strong> : <em>( <code>Number</code> )</em> The current total heap in bytes.</li>
+<li><strong>metric.p_mem.heapUsed</strong> : <em>( <code>Number</code> )</em> The current used heap in bytes.</li>
+<li><strong>metric.p_mem.rss</strong> : <em>( <code>Number</code> )</em> The current ram usage in bytes.</li></ul></li></ul></li>
+</ul>
+
+
+<div class="pilwrap" id="connected">
+  <h4>
+    <a href="#connected" name="connected" class="pilcrow">&#182;</a>
+    <code>connected</code>
+  </h4>
+</div>
+
+
+<p>Emitted on connection to redis</p>
+
+
+<div class="pilwrap" id="disconnect">
+  <h4>
+    <a href="#disconnect" name="disconnect" class="pilcrow">&#182;</a>
+    <code>disconnect</code>
+  </h4>
+</div>
+
+
+<p>Emitted on a disconnect of redis</p>
+
+
+<div class="pilwrap" id="redis%3Aerror">
+  <h4>
+    <a href="#redis%3Aerror" name="redis%3Aerror" class="pilcrow">&#182;</a>
+    <code>redis:error</code>
+  </h4>
+</div>
+
+
+<p>Emitted on general redis error</p>
+
+<p><strong>Arguments</strong> </p>
+
+<ul>
+<li><strong>err</strong> : <em>( <code>Error|String</code> )</em> The error details</li>
+</ul>
+
+
+<div class="pilwrap" id="todo">
+  <h2>
+    <a href="#todo" name="todo" class="pilcrow">&#182;</a>
+    TODO
+  </h2>
+</div>
+
+
+<ul>
+<li>add free disk space to metrics</li>
+</ul>
+
+
+<div class="pilwrap" id="release%20history">
+  <h2>
+    <a href="#release%20history" name="release%20history" class="pilcrow">&#182;</a>
+    Release History
+  </h2>
+</div>
+
+
+<p>|Version|Date|Description|
+|:--:|:--:|:--|
+|0.0.1|2014-11-18|Initial commit|</p>
+
+
+<div class="pilwrap" id="the%20mit%20license%20(mit)">
+  <h2>
+    <a href="#the%20mit%20license%20(mit)" name="the%20mit%20license%20(mit)" class="pilcrow">&#182;</a>
+    The MIT License (MIT)
+  </h2>
+</div>
+
+
+<p>Copyright © 2013 Mathias Peter, <a href='http://www.tcs.de'>http://www.tcs.de</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></div>
+  </div>
+</body>
+</html>

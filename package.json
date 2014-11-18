@@ -1,0 +1,35 @@
+{
+  "name": "redis-heartbeat",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/mpneuried/redis-heartbeat",
+  "bugs": "https://github.com/mpneuried/redis-heartbeat/issues",
+  "author": {
+    "name": "M. Peter",
+    "email": "",
+    "url": "https://github.com/redis-heartbeat"
+  },
+  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mpneuried/redis-heartbeat.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "mpbasic": "0.0.x",
+    "redis": "0.12.x",
+    "hiredis": "0.1.x",
+    "lodash": "2.4.x"
+  },
+  "devDependencies": {
+    "should": "4.3.x",
+    "grunt": "0.4.x",
+    "grunt-regarde": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-include-replace": "*",
+    "grunt-mocha-cli": "*",
+    "grunt-docker": "0.0.8",
+    "grunt-contrib-clean": "*"
+  }
+}
