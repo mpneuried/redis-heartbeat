@@ -41,6 +41,28 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 - **client** : *( `RedicClient` optional: default = `null` )* It also possible to pass in a already existing redis client instance. In this case the options `host`, `port` and `options` ar ignored.
 - **redisprefix** : *( `String` optional: default = `{}` )* A general redis key prefix
 
+## Methods
+
+#### `.start()`
+
+Start the heartbeat.
+
+**Return**
+
+*( Booelan )*: If it has been started. Could be `false` if the heartbeat has been already active
+
+#### `.stop()`
+
+Stop the heartbeat.
+
+#### `.isActive()`
+
+Ask if the heartbeat is currently active.
+
+**Return**
+
+*( Booelan )*: Haertbeat is active
+
 ## Events
 
 #### `started`
@@ -98,7 +120,8 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|0.0.2|2014-11-18|added autostart option|
+|0.0.3|2014-11-19|added methods `.start()`, `.stop()` and `.isActive()` |
+|0.0.2|2014-11-19|added autostart option|
 |0.0.1|2014-11-18|Initial commit|
 
 ## The MIT License (MIT)

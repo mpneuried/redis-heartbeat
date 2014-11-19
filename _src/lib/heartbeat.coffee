@@ -53,8 +53,10 @@ class Heartbeat extends Redisconnector
 		super
 
 		# wrap start method to only be active until the connection is established
+		# This will be the public method
 		@start = @_waitUntil( @_start, "connected" )
 
+		@active = false
 		@start() if @config.autostart
 		@connect()
 
@@ -63,14 +65,19 @@ class Heartbeat extends Redisconnector
 	###
 	## _start
 	
-	`heartbeat._start(  )`
+	`heartbeat._start()`
 	
 	Start the heartbeat and metric send
+
+	@return { Boolean } If it has been started. Could be false if the heartbeat has been already active
 	
 	@api private
 	###
 	_start: =>
-
+		# don't start a second tine
+		return false if @active
+		
+		@active = true
 		if not @config.name?.length
 			@_handleError( false, "ENONAME" )
 			return
@@ -90,7 +97,36 @@ class Heartbeat extends Redisconnector
 		@_sendMetrics() if @_sendMetrics?
 
 		@emit "started"
+		return true
+
+	###
+	## stop
+	
+	`heartbeat.stop()`
+	
+	Stop sending a heartbeat and clear all active timeouts
+	
+	@api public
+	###
+	stop: =>
+		@active = false
+		clearTimeout( @_timerHeartbeat ) if @_timerHeartbeat
+		clearTimeout( @_timerMetrics ) if @_timerMetrics
 		return
+
+	###
+	## isActive
+	
+	`heartbeat.isActive()`
+	
+	Ask if the heartbeat is currently active
+	
+	@return { Boolean } Is heartbeat active 
+	
+	@api public
+	###
+	isActive: =>
+		return @active
 
 	###
 	## heartbeat
@@ -102,6 +138,7 @@ class Heartbeat extends Redisconnector
 	@api private
 	###
 	heartbeat: =>
+		return if not @active
 		clearTimeout( @_timerHeartbeat ) if @_timerHeartbeat
 		@_timerHeartbeat = setTimeout( @_sendHeartbeat, @config.intervalHeartbeat * 1000 )
 		return
@@ -116,6 +153,7 @@ class Heartbeat extends Redisconnector
 	@api private
 	###
 	metrics: =>
+		return if not @active
 		# silent stop if function not exists or a invalid intervall has been defined
 		if not @_sendMetrics? or @config.intervalMetrics <= 0
 			@debug "metrics: metrics deactivated"
@@ -172,11 +210,14 @@ class Heartbeat extends Redisconnector
 	Generate the heartbeat content
 
 	@param { String } type The type to send. *( enum: "heartbeat", "metric" )*
+	@param { Object } [options] Optional options. 
 	@param { Function } cb Callback function 
 	
 	@api private
 	###
-	_content: ( type, cb )=>
+	_content: ( args..., cb )=>
+		[ type, options ] = args
+
 		@_getTime ( err, ms )=>
 			if err
 				cb( err )
@@ -205,8 +246,8 @@ class Heartbeat extends Redisconnector
 					p_id: process.pid
 					p_uptime: process.uptime()
 
+				@emit "beforeMetric", _data
 				_sData = JSON.stringify( _data )
-				@emit "beforeMetric", _sData
 				_statements.push [ "LPUSH", _key, _sData ]
 				_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
 				cb( null, _statements )

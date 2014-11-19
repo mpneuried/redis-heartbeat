@@ -28,6 +28,18 @@
         <a href="#initialize">Initialize</a>
       </div>
       <div class="heading h2">
+        <a href="#methods">Methods</a>
+      </div>
+      <div class="heading h4">
+        <a href="#.start()">.start()</a>
+      </div>
+      <div class="heading h4">
+        <a href="#.stop()">.stop()</a>
+      </div>
+      <div class="heading h4">
+        <a href="#.isactive()">.isActive()</a>
+      </div>
+      <div class="heading h2">
         <a href="#events">Events</a>
       </div>
       <div class="heading h4">
@@ -122,6 +134,56 @@
 <li><strong>client</strong> : <em>( <code>RedicClient</code> optional: default = <code>null</code> )</em> It also possible to pass in a already existing redis client instance. In this case the options <code>host</code>, <code>port</code> and <code>options</code> ar ignored.</li>
 <li><strong>redisprefix</strong> : <em>( <code>String</code> optional: default = <code>{}</code> )</em> A general redis key prefix</li>
 </ul>
+
+
+<div class="pilwrap" id="methods">
+  <h2>
+    <a href="#methods" name="methods" class="pilcrow">&#182;</a>
+    Methods
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id=".start()">
+  <h4>
+    <a href="#.start()" name=".start()" class="pilcrow">&#182;</a>
+    <code>.start()</code>
+  </h4>
+</div>
+
+
+<p>Start the heartbeat.</p>
+
+<p><strong>Return</strong></p>
+
+<p><em>( Booelan )</em>: If it has been started. Could be <code>false</code> if the heartbeat has been already active</p>
+
+
+<div class="pilwrap" id=".stop()">
+  <h4>
+    <a href="#.stop()" name=".stop()" class="pilcrow">&#182;</a>
+    <code>.stop()</code>
+  </h4>
+</div>
+
+
+<p>Stop the heartbeat.</p>
+
+
+<div class="pilwrap" id=".isactive()">
+  <h4>
+    <a href="#.isactive()" name=".isactive()" class="pilcrow">&#182;</a>
+    <code>.isActive()</code>
+  </h4>
+</div>
+
+
+<p>Ask if the heartbeat is currently active.</p>
+
+<p><strong>Return</strong></p>
+
+<p><em>( Booelan )</em>: Haertbeat is active</p>
 
 
 <div class="pilwrap" id="events">
@@ -252,7 +314,8 @@ With this event it's possible to change the heartbeat content in operation</p>
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
-|0.0.2|2014-11-18|added autostart option|
+|0.0.3|2014-11-19|added methods <code>.start()</code>, <code>.stop()</code> and <code>.isActive()</code> |
+|0.0.2|2014-11-19|added autostart option|
 |0.0.1|2014-11-18|Initial commit|</p>
 
 
