@@ -73,7 +73,7 @@
 <a href="https://david-dm.org/mpneuried/redis-heartbeat"><img src="https://david-dm.org/mpneuried/redis-heartbeat.png" alt="Build Status" title="" /></a>
 <a href="http://badge.fury.io/js/redis-heartbeat"><img src="https://badge.fury.io/js/redis-heartbeat.png" alt="NPM version" title="" /></a></p>
 
-<p>Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems</p>
+<p>Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems.</p>
 
 <p><em>Written in coffee-script</em></p>
 
@@ -100,8 +100,8 @@
 </div>
 
 
-<div class='highlight'><pre><code language=''>    var Heartbeat = require( "heartbeat" );
-    new Heartbeat( { name: "FOO", identifier: "http://www.bar.biz:4223" } )
+<div class='highlight'><pre><code language=''>    var Heartbeat = require( "redis-heartbeat" );
+    var HBInst = new Heartbeat( { name: "FOO", identifier: "http://www.bar.biz:4223" } );
 </code></pre></div>
 
 <p><strong>Options</strong> </p>
@@ -113,7 +113,9 @@
 <li><strong>heartbeatKey</strong> : <em>( <code>String</code> optional: default = <code>HB</code> )</em> Redis key to write the heartbeat. This could be prefixed by <code>redisprefix</code>.</li>
 <li><strong>intervalMetrics</strong> : <em>( <code>Number</code> optional: default = <code>60</code> )</em> Min. interval time ( in seconds ) to send the metrics. If set <code>&lt;= 0</code> no metrics will be written</li>
 <li><strong>metricsKey</strong> : <em>( <code>String</code> optional: default = <code>HB:METRICS</code> )</em> Redis key to write the machine/process metrics. If this is set to <code>null</code> no mertics will be written to redis. This could be prefixed by <code>redisprefix</code>.</li>
+<li><strong>metricCount</strong> : <em>( <code>Number</code> optional: default = <code>5000</code> )</em> Metrics will be saved as redis list. The list will be trimed to this length.</li>
 <li><strong>useRedisTime</strong> : <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Use redis server time or us the own machine time</li>
+<li><strong>autostart</strong> : <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Start the heartbeat on int. Otherwise you have to call the method <code>.start()</code> of your instance.</li>
 <li><strong>host</strong> : <em>( <code>String</code> optional: default = <code>localhost</code> )</em> Redis host name</li>
 <li><strong>port</strong> : <em>( <code>Number</code> optional: default = <code>6379</code> )</em> Redis port</li>
 <li><strong>options</strong> : <em>( <code>Object</code> optional: default = <code>{}</code> )</em> Redis options</li>
@@ -236,6 +238,7 @@ With this event it's possible to change the heartbeat content in operation</p>
 
 <ul>
 <li>add free disk space to metrics</li>
+<li>add content tests</li>
 </ul>
 
 
@@ -249,6 +252,7 @@ With this event it's possible to change the heartbeat content in operation</p>
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.2|2014-11-18|added autostart option|
 |0.0.1|2014-11-18|Initial commit|</p>
 
 

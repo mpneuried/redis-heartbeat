@@ -44,7 +44,8 @@ class Heartbeat extends Redisconnector
 			metricCount: 5000
 			# **heartbeat.useRedisTime** *Boolean* Use redis server time or us the own time
 			useRedisTime: true
-
+			# **heartbeat.autostart** *Boolean* Start the heartbeat on init
+			autostart: true
 	###	
 	## constructor 
 	###
@@ -54,7 +55,7 @@ class Heartbeat extends Redisconnector
 		# wrap start method to only be active until the connection is established
 		@start = @_waitUntil( @_start, "connected" )
 
-		@start()
+		@start() if @config.autostart
 		@connect()
 
 		return
@@ -227,7 +228,7 @@ class Heartbeat extends Redisconnector
 	@api private
 	###
 	_getTime: ( cb )=>
-		if not @config.useRedisTime
+		if not @config.autostart
 			cb( null, Date.now() )
 			return
 

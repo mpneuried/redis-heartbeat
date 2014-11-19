@@ -21,7 +21,7 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 
 ```
 	var Heartbeat = require( "redis-heartbeat" );
-	new Heartbeat( { name: "FOO", identifier: "http://www.bar.biz:4223" } );
+	var HBInst = new Heartbeat( { name: "FOO", identifier: "http://www.bar.biz:4223" } );
 ```
 
 **Options** 
@@ -34,6 +34,7 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 - **metricsKey** : *( `String` optional: default = `HB:METRICS` )* Redis key to write the machine/process metrics. If this is set to `null` no mertics will be written to redis. This could be prefixed by `redisprefix`.
 - **metricCount** : *( `Number` optional: default = `5000` )* Metrics will be saved as redis list. The list will be trimed to this length.
 - **useRedisTime** : *( `Boolean` optional: default = `true` )* Use redis server time or us the own machine time
+- **autostart** : *( `Boolean` optional: default = `true` )* Start the heartbeat on int. Otherwise you have to call the method `.start()` of your instance.
 - **host** : *( `String` optional: default = `localhost` )* Redis host name
 - **port** : *( `Number` optional: default = `6379` )* Redis port
 - **options** : *( `Object` optional: default = `{}` )* Redis options
@@ -97,6 +98,7 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.2|2014-11-18|added autostart option|
 |0.0.1|2014-11-18|Initial commit|
 
 ## The MIT License (MIT)
