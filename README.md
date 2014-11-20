@@ -120,6 +120,7 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.4|2014-11-20|fixed redis key gen method and added ZSET for last active metrics|
 |0.0.3|2014-11-19|added methods `.start()`, `.stop()` and `.isActive()` |
 |0.0.2|2014-11-19|added autostart option|
 |0.0.1|2014-11-18|Initial commit|

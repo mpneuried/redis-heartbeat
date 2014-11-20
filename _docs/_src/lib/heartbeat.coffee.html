@@ -194,7 +194,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
-<p><strong>heartbeat.name</strong> <em>String</em> A identifier name</p>
+<p><strong>name</strong> <em>String</em> A identifier name</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-31" id="line-31">31</a>  
 <a class="line-num" href="#line-32" id="line-32">32</a>        <span class="nv">name: </span><span class="kc">null</span>
@@ -207,7 +207,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
-<p><strong>heartbeat.identifier</strong> <em>String|Function</em> The heartbeat identifier content as string or function</p>
+<p><strong>identifier</strong> <em>String|Function</em> The heartbeat identifier content as string or function</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-33" id="line-33">33</a>  
 <a class="line-num" href="#line-34" id="line-34">34</a>        <span class="nv">identifier: </span><span class="kc">null</span>
@@ -221,7 +221,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
-<p><strong>heartbeat.intervalHeartbeat</strong> <em>Number</em> Interval in seconds to write the alive key to redis</p>
+<p><strong>intervalHeartbeat</strong> <em>Number</em> Interval in seconds to write the alive key to redis</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-36" id="line-36">36</a>  
 <a class="line-num" href="#line-37" id="line-37">37</a>        <span class="nv">intervalHeartbeat: </span><span class="mi">5</span>
@@ -234,7 +234,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
-<p><strong>heartbeat.heartbeatKey</strong> <em>String</em> Key prefix for the alive heartbeat</p>
+<p><strong>heartbeatKey</strong> <em>String</em> Key prefix for the alive heartbeat</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-38" id="line-38">38</a>  
 <a class="line-num" href="#line-39" id="line-39">39</a>        <span class="nv">heartbeatKey: </span><span class="s">&quot;HB&quot;</span>
@@ -247,7 +247,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
-<p><strong>heartbeat.intervalMetrics</strong> <em>Number</em> Interval in seconds to write server metrics to redis. If set <code>&lt;= 0</code> no metrics will be written</p>
+<p><strong>intervalMetrics</strong> <em>Number</em> Interval in seconds to write server metrics to redis. If set <code>&lt;= 0</code> no metrics will be written</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-40" id="line-40">40</a>  
 <a class="line-num" href="#line-41" id="line-41">41</a>        <span class="nv">intervalMetrics: </span><span class="mi">60</span>
@@ -260,7 +260,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
-<p><strong>heartbeat.metricsKey</strong> <em>String</em> Key prefix for the metrics key. If this is set to <code>null</code> no mertics will be written to redis</p>
+<p><strong>metricsKey</strong> <em>String</em> Key prefix for the metrics key. If this is set to <code>null</code> no mertics will be written to redis</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-42" id="line-42">42</a>  
 <a class="line-num" href="#line-43" id="line-43">43</a>        <span class="nv">metricsKey: </span><span class="s">&quot;HB:METRICS&quot;</span>
@@ -273,7 +273,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
-<p><strong>heartbeat.metricCount</strong> <em>Number</em> Metrics will be saved as redis list. The list will be trimed to this length</p>
+<p><strong>metricCount</strong> <em>Number</em> Metrics will be saved as redis list. The list will be trimed to this length</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-44" id="line-44">44</a>  
 <a class="line-num" href="#line-45" id="line-45">45</a>        <span class="nv">metricCount: </span><span class="mi">5000</span>
@@ -286,7 +286,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
-<p><strong>heartbeat.useRedisTime</strong> <em>Boolean</em> Use redis server time or us the own time</p>
+<p><strong>useRedisTime</strong> <em>Boolean</em> Use redis server time or us the own time</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-46" id="line-46">46</a>  
 <a class="line-num" href="#line-47" id="line-47">47</a>        <span class="nv">useRedisTime: </span><span class="kc">true</span>
@@ -299,7 +299,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
-<p><strong>heartbeat.autostart</strong> <em>Boolean</em> Start the heartbeat on init</p>
+<p><strong>autostart</strong> <em>Boolean</em> Start the heartbeat on init</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-48" id="line-48">48</a>  
 <a class="line-num" href="#line-49" id="line-49">49</a>        <span class="nv">autostart: </span><span class="kc">true</span>
@@ -371,7 +371,7 @@ This will be the public method</p>
     <div class="dox_tag_detail">
       <span class="dox_tag_name"></span>
       <span class="dox_type">Boolean</span>
-      <span>If it has been started. Could be false if the heartbeat has been already active</span>
+      <span>If it has been started. Could be <code>false</code> if the heartbeat has been already active</span>
     </div>
     <div class="dox_tag_title">API</div>
     <div class="dox_tag_detail">
@@ -783,16 +783,17 @@ This will be the public method</p>
 <a class="line-num" href="#line-250" id="line-250">250</a>          <span class="nx">@emit</span> <span class="s">&quot;beforeMetric&quot;</span><span class="p">,</span> <span class="nx">_data</span>
 <a class="line-num" href="#line-251" id="line-251">251</a>          <span class="nv">_sData = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span> <span class="nx">_data</span> <span class="p">)</span>
 <a class="line-num" href="#line-252" id="line-252">252</a>          <span class="nx">_statements</span><span class="p">.</span><span class="nx">push</span> <span class="p">[</span> <span class="s">&quot;LPUSH&quot;</span><span class="p">,</span> <span class="nx">_key</span><span class="p">,</span> <span class="nx">_sData</span> <span class="p">]</span>
-<a class="line-num" href="#line-253" id="line-253">253</a>          <span class="nx">_statements</span><span class="p">.</span><span class="nx">push</span> <span class="p">[</span> <span class="s">&quot;LTRIM&quot;</span><span class="p">,</span> <span class="nx">_key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">metricCount</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span>
-<a class="line-num" href="#line-254" id="line-254">254</a>          <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">_statements</span> <span class="p">)</span>
-<a class="line-num" href="#line-255" id="line-255">255</a>          <span class="k">return</span>
-<a class="line-num" href="#line-256" id="line-256">256</a>  
-<a class="line-num" href="#line-257" id="line-257">257</a>        <span class="nx">@_handleError</span><span class="p">(</span> <span class="nx">cb</span><span class="p">,</span> <span class="s">&quot;EINVALIDTYPE&quot;</span> <span class="p">)</span>
-<a class="line-num" href="#line-258" id="line-258">258</a>        <span class="k">return</span>
-<a class="line-num" href="#line-259" id="line-259">259</a>      <span class="k">return</span>
-<a class="line-num" href="#line-260" id="line-260">260</a>  
+<a class="line-num" href="#line-253" id="line-253">253</a>          <span class="nx">_statements</span><span class="p">.</span><span class="nx">push</span> <span class="p">[</span> <span class="s">&quot;ZADD&quot;</span><span class="p">,</span> <span class="nx">@_getKey</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">metricsKey</span> <span class="p">),</span> <span class="nx">ms</span><span class="p">,</span> <span class="nx">_key</span> <span class="p">]</span>
+<a class="line-num" href="#line-254" id="line-254">254</a>          <span class="nx">_statements</span><span class="p">.</span><span class="nx">push</span> <span class="p">[</span> <span class="s">&quot;LTRIM&quot;</span><span class="p">,</span> <span class="nx">_key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">metricCount</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">]</span>
+<a class="line-num" href="#line-255" id="line-255">255</a>          <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">_statements</span> <span class="p">)</span>
+<a class="line-num" href="#line-256" id="line-256">256</a>          <span class="k">return</span>
+<a class="line-num" href="#line-257" id="line-257">257</a>  
+<a class="line-num" href="#line-258" id="line-258">258</a>        <span class="nx">@_handleError</span><span class="p">(</span> <span class="nx">cb</span><span class="p">,</span> <span class="s">&quot;EINVALIDTYPE&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-259" id="line-259">259</a>        <span class="k">return</span>
+<a class="line-num" href="#line-260" id="line-260">260</a>      <span class="k">return</span>
 <a class="line-num" href="#line-261" id="line-261">261</a>  
-<a class="line-num" href="#line-262" id="line-262">262</a>  </pre></div>
+<a class="line-num" href="#line-262" id="line-262">262</a>  
+<a class="line-num" href="#line-263" id="line-263">263</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -825,17 +826,17 @@ This will be the public method</p>
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-271" id="line-271">271</a>  
-<a class="line-num" href="#line-272" id="line-272">272</a>    <span class="nv">_getTime: </span><span class="nf">( cb )=&gt;</span>
-<a class="line-num" href="#line-273" id="line-273">273</a>      <span class="k">if</span> <span class="o">not</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">autostart</span>
-<a class="line-num" href="#line-274" id="line-274">274</a>        <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="p">)</span>
-<a class="line-num" href="#line-275" id="line-275">275</a>        <span class="k">return</span>
-<a class="line-num" href="#line-276" id="line-276">276</a>  
-<a class="line-num" href="#line-277" id="line-277">277</a>      <span class="nx">@_getRedisTime</span><span class="p">(</span> <span class="nx">cb</span> <span class="p">)</span>
-<a class="line-num" href="#line-278" id="line-278">278</a>      <span class="k">return</span>
-<a class="line-num" href="#line-279" id="line-279">279</a>  
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-272" id="line-272">272</a>  
+<a class="line-num" href="#line-273" id="line-273">273</a>    <span class="nv">_getTime: </span><span class="nf">( cb )=&gt;</span>
+<a class="line-num" href="#line-274" id="line-274">274</a>      <span class="k">if</span> <span class="o">not</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">autostart</span>
+<a class="line-num" href="#line-275" id="line-275">275</a>        <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="p">)</span>
+<a class="line-num" href="#line-276" id="line-276">276</a>        <span class="k">return</span>
+<a class="line-num" href="#line-277" id="line-277">277</a>  
+<a class="line-num" href="#line-278" id="line-278">278</a>      <span class="nx">@_getRedisTime</span><span class="p">(</span> <span class="nx">cb</span> <span class="p">)</span>
+<a class="line-num" href="#line-279" id="line-279">279</a>      <span class="k">return</span>
 <a class="line-num" href="#line-280" id="line-280">280</a>  
-<a class="line-num" href="#line-281" id="line-281">281</a>  </pre></div>
+<a class="line-num" href="#line-281" id="line-281">281</a>  
+<a class="line-num" href="#line-282" id="line-282">282</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -868,15 +869,15 @@ This will be the public method</p>
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-290" id="line-290">290</a>  
-<a class="line-num" href="#line-291" id="line-291">291</a>    <span class="nv">_getRedisTime: </span><span class="nf">( cb )=&gt;</span>
-<a class="line-num" href="#line-292" id="line-292">292</a>      <span class="nx">@redis</span><span class="p">.</span><span class="nx">time</span> <span class="nf">( err, time )=&gt;</span>
-<a class="line-num" href="#line-293" id="line-293">293</a>        <span class="k">if</span> <span class="nx">err</span>
-<a class="line-num" href="#line-294" id="line-294">294</a>          <span class="nx">cb</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span>
-<a class="line-num" href="#line-295" id="line-295">295</a>          <span class="k">return</span>    
-<a class="line-num" href="#line-296" id="line-296">296</a>        
-<a class="line-num" href="#line-297" id="line-297">297</a>  
-<a class="line-num" href="#line-298" id="line-298">298</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-291" id="line-291">291</a>  
+<a class="line-num" href="#line-292" id="line-292">292</a>    <span class="nv">_getRedisTime: </span><span class="nf">( cb )=&gt;</span>
+<a class="line-num" href="#line-293" id="line-293">293</a>      <span class="nx">@redis</span><span class="p">.</span><span class="nx">time</span> <span class="nf">( err, time )=&gt;</span>
+<a class="line-num" href="#line-294" id="line-294">294</a>        <span class="k">if</span> <span class="nx">err</span>
+<a class="line-num" href="#line-295" id="line-295">295</a>          <span class="nx">cb</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span>
+<a class="line-num" href="#line-296" id="line-296">296</a>          <span class="k">return</span>    
+<a class="line-num" href="#line-297" id="line-297">297</a>        
+<a class="line-num" href="#line-298" id="line-298">298</a>  
+<a class="line-num" href="#line-299" id="line-299">299</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -886,10 +887,10 @@ This will be the public method</p>
 </div>
 <p>calc miliseconds from redis seconds and nano-seconds</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-297" id="line-297">297</a>  
-<a class="line-num" href="#line-298" id="line-298">298</a>        <span class="p">[</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">ns</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">time</span>
-<a class="line-num" href="#line-299" id="line-299">299</a>  
-<a class="line-num" href="#line-300" id="line-300">300</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-298" id="line-298">298</a>  
+<a class="line-num" href="#line-299" id="line-299">299</a>        <span class="p">[</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">ns</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">time</span>
+<a class="line-num" href="#line-300" id="line-300">300</a>  
+<a class="line-num" href="#line-301" id="line-301">301</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -899,17 +900,17 @@ This will be the public method</p>
 </div>
 <p>pad the nanoseconds</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-299" id="line-299">299</a>  
-<a class="line-num" href="#line-300" id="line-300">300</a>        <span class="nv">ns = </span><span class="p">(</span> <span class="s">&quot;000000&quot;</span> <span class="o">+</span> <span class="nx">ns</span> <span class="p">)[</span><span class="mi">0</span><span class="p">..</span><span class="mi">5</span><span class="p">]</span>
-<a class="line-num" href="#line-301" id="line-301">301</a>        <span class="nv">ms = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span> <span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span> <span class="nx">s</span> <span class="o">+</span> <span class="nx">ns</span> <span class="p">,</span> <span class="mi">10</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span> <span class="p">)</span> <span class="p">)</span>
-<a class="line-num" href="#line-302" id="line-302">302</a>  
-<a class="line-num" href="#line-303" id="line-303">303</a>        <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">ms</span> <span class="p">)</span> 
-<a class="line-num" href="#line-304" id="line-304">304</a>        <span class="k">return</span>
-<a class="line-num" href="#line-305" id="line-305">305</a>      <span class="k">return</span>
-<a class="line-num" href="#line-306" id="line-306">306</a>  
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-300" id="line-300">300</a>  
+<a class="line-num" href="#line-301" id="line-301">301</a>        <span class="nv">ns = </span><span class="p">(</span> <span class="s">&quot;000000&quot;</span> <span class="o">+</span> <span class="nx">ns</span> <span class="p">)[</span><span class="mi">0</span><span class="p">..</span><span class="mi">5</span><span class="p">]</span>
+<a class="line-num" href="#line-302" id="line-302">302</a>        <span class="nv">ms = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span> <span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span> <span class="nx">s</span> <span class="o">+</span> <span class="nx">ns</span> <span class="p">,</span> <span class="mi">10</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span> <span class="p">)</span> <span class="p">)</span>
+<a class="line-num" href="#line-303" id="line-303">303</a>  
+<a class="line-num" href="#line-304" id="line-304">304</a>        <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">ms</span> <span class="p">)</span> 
+<a class="line-num" href="#line-305" id="line-305">305</a>        <span class="k">return</span>
+<a class="line-num" href="#line-306" id="line-306">306</a>      <span class="k">return</span>
 <a class="line-num" href="#line-307" id="line-307">307</a>  
 <a class="line-num" href="#line-308" id="line-308">308</a>  
-<a class="line-num" href="#line-309" id="line-309">309</a>  </pre></div>
+<a class="line-num" href="#line-309" id="line-309">309</a>  
+<a class="line-num" href="#line-310" id="line-310">310</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -942,15 +943,15 @@ This will be the public method</p>
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-318" id="line-318">318</a>  
-<a class="line-num" href="#line-319" id="line-319">319</a>    <span class="nv">ERRORS: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-320" id="line-320">320</a>      <span class="k">return</span> <span class="nx">@extend</span> <span class="p">{},</span> <span class="k">super</span><span class="p">,</span> 
-<a class="line-num" href="#line-321" id="line-321">321</a>        <span class="s">&quot;ENONAME&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;No `name` defined. The heartbeat will not be send&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-322" id="line-322">322</a>        <span class="s">&quot;ENOIDENTIFIER&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;No `identifier` defined. The heartbeat will not be send&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-323" id="line-323">323</a>        <span class="s">&quot;EINVALIDTYPE&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;Invalid type. Only `heartbeat` and `metrics` are allowed&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-324" id="line-324">324</a>  
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-319" id="line-319">319</a>  
+<a class="line-num" href="#line-320" id="line-320">320</a>    <span class="nv">ERRORS: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-321" id="line-321">321</a>      <span class="k">return</span> <span class="nx">@extend</span> <span class="p">{},</span> <span class="k">super</span><span class="p">,</span> 
+<a class="line-num" href="#line-322" id="line-322">322</a>        <span class="s">&quot;ENONAME&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;No `name` defined. The heartbeat will not be send&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-323" id="line-323">323</a>        <span class="s">&quot;ENOIDENTIFIER&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;No `identifier` defined. The heartbeat will not be send&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-324" id="line-324">324</a>        <span class="s">&quot;EINVALIDTYPE&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;Invalid type. Only `heartbeat` and `metrics` are allowed&quot;</span> <span class="p">]</span>
 <a class="line-num" href="#line-325" id="line-325">325</a>  
-<a class="line-num" href="#line-326" id="line-326">326</a>  </pre></div>
+<a class="line-num" href="#line-326" id="line-326">326</a>  
+<a class="line-num" href="#line-327" id="line-327">327</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -960,9 +961,9 @@ This will be the public method</p>
 </div>
 <p>export this class</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-325" id="line-325">325</a>  
-<a class="line-num" href="#line-326" id="line-326">326</a>  <span class="nv">module.exports = </span><span class="nx">Heartbeat</span>
-<a class="line-num" href="#line-327" id="line-327">327</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-326" id="line-326">326</a>  
+<a class="line-num" href="#line-327" id="line-327">327</a>  <span class="nv">module.exports = </span><span class="nx">Heartbeat</span>
+<a class="line-num" href="#line-328" id="line-328">328</a>  </pre></div>
         </td>
       </tr>
   </tbody>

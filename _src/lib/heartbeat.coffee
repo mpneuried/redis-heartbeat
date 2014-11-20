@@ -27,24 +27,24 @@ class Heartbeat extends Redisconnector
 	# ## defaults
 	defaults: =>
 		@extend super, 
-			# **heartbeat.name** *String* A identifier name
+			# **name** *String* A identifier name
 			name: null
-			# **heartbeat.identifier** *String|Function* The heartbeat identifier content as string or function
+			# **identifier** *String|Function* The heartbeat identifier content as string or function
 			identifier: null
 
-			# **heartbeat.intervalHeartbeat** *Number* Interval in seconds to write the alive key to redis
+			# **intervalHeartbeat** *Number* Interval in seconds to write the alive key to redis
 			intervalHeartbeat: 5
-			# **heartbeat.heartbeatKey** *String* Key prefix for the alive heartbeat
+			# **heartbeatKey** *String* Key prefix for the alive heartbeat
 			heartbeatKey: "HB"
-			# **heartbeat.intervalMetrics** *Number* Interval in seconds to write server metrics to redis. If set `<= 0` no metrics will be written
+			# **intervalMetrics** *Number* Interval in seconds to write server metrics to redis. If set `<= 0` no metrics will be written
 			intervalMetrics: 60
-			# **heartbeat.metricsKey** *String* Key prefix for the metrics key. If this is set to `null` no mertics will be written to redis
+			# **metricsKey** *String* Key prefix for the metrics key. If this is set to `null` no mertics will be written to redis
 			metricsKey: "HB:METRICS"
-			# **heartbeat.metricCount** *Number* Metrics will be saved as redis list. The list will be trimed to this length
+			# **metricCount** *Number* Metrics will be saved as redis list. The list will be trimed to this length
 			metricCount: 5000
-			# **heartbeat.useRedisTime** *Boolean* Use redis server time or us the own time
+			# **useRedisTime** *Boolean* Use redis server time or us the own time
 			useRedisTime: true
-			# **heartbeat.autostart** *Boolean* Start the heartbeat on init
+			# **autostart** *Boolean* Start the heartbeat on init
 			autostart: true
 	###	
 	## constructor 
@@ -69,7 +69,7 @@ class Heartbeat extends Redisconnector
 	
 	Start the heartbeat and metric send
 
-	@return { Boolean } If it has been started. Could be false if the heartbeat has been already active
+	@return { Boolean } If it has been started. Could be `false` if the heartbeat has been already active
 	
 	@api private
 	###
@@ -249,6 +249,7 @@ class Heartbeat extends Redisconnector
 				@emit "beforeMetric", _data
 				_sData = JSON.stringify( _data )
 				_statements.push [ "LPUSH", _key, _sData ]
+				_statements.push [ "ZADD", @_getKey( null, @config.metricsKey ), ms, _key ]
 				_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
 				cb( null, _statements )
 				return

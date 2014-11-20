@@ -26,15 +26,15 @@ class RedisConnector extends require( "mpbasic" )()
 	# ## defaults
 	defaults: =>
 		return @extend super, 
-			# **redis.host** *String* Redis host name
+			# **host** *String* Redis host name
 			host: "localhost"
-			# **redis.port** *Number* Redis port
+			# **port** *Number* Redis port
 			port: 6379
-			# **redis.options** *Object* Redis options
+			# **options** *Object* Redis options
 			options: {}
-			# **redis.client** *RedisClient* Exsiting redis client instance
+			# **client** *RedisClient* Exsiting redis client instance
 			client: null
-			# **redis.redisprefix** *String* A general redis key prefix
+			# **redisprefix** *String* A general redis key prefix
 			redisprefix: ""
 
 
@@ -111,11 +111,11 @@ class RedisConnector extends require( "mpbasic" )()
 	_getKey: ( id, name )=>
 		_key = @config.redisprefix or ""
 		if name?.length
-			if _key.length 
+			if _key.length and _key[-1..] isnt ":"
 				_key += ":"
 			_key += name
 		if id?.length
-			if _key.length 
+			if _key.length and _key[-1..] isnt ":"
 				_key += ":"
 			_key += id
 
