@@ -121,6 +121,7 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.7|2015-04-27|updated dependencies|
 |0.0.6|2015-04-27|added option `metricExpire` to autodelete unused metrics|
 |0.0.5|2014-11-20|fixed redis key gen method and added ZSET for last active metrics|
 |0.0.3|2014-11-19|added methods `.start()`, `.stop()` and `.isActive()` |

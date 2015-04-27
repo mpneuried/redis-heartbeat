@@ -1,5 +1,5 @@
 (function() {
-  var Heartbeat, should, _hb;
+  var Heartbeat, _hb, should;
 
   should = require('should');
 
