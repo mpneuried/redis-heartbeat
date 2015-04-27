@@ -42,10 +42,13 @@ class Heartbeat extends Redisconnector
 			metricsKey: "HB:METRICS"
 			# **metricCount** *Number* Metrics will be saved as redis list. The list will be trimed to this length
 			metricCount: 5000
+			# **metricExpire** *Number* Time in seconds until unused metrict will automatically removed. If set to `0` the key will never be removed
+			metricExpire: 60*60*24*2
 			# **useRedisTime** *Boolean* Use redis server time or us the own time
 			useRedisTime: true
 			# **autostart** *Boolean* Start the heartbeat on init
 			autostart: true
+
 	###	
 	## constructor 
 	###
@@ -251,6 +254,11 @@ class Heartbeat extends Redisconnector
 				_statements.push [ "LPUSH", _key, _sData ]
 				_statements.push [ "ZADD", @_getKey( null, @config.metricsKey ), ms, _key ]
 				_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
+				_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
+				
+				if @config.metricExpire > 0
+					_statements.push [ "EXPIRE", _key, @config.metricExpire ]
+
 				cb( null, _statements )
 				return
 

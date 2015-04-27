@@ -33,6 +33,7 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 - **intervalMetrics** : *( `Number` optional: default = `60` )* Min. interval time ( in seconds ) to send the metrics. If set `<= 0` no metrics will be written
 - **metricsKey** : *( `String` optional: default = `HB:METRICS` )* Redis key to write the machine/process metrics. If this is set to `null` no mertics will be written to redis. This could be prefixed by `redisprefix`.
 - **metricCount** : *( `Number` optional: default = `5000` )* Metrics will be saved as redis list. The list will be trimed to this length.
+- **metricExpire** : *( `Number` optional: default = `172800` 2 days )* Time in seconds until unused metrict will automatically removed. If set to `0` the key will never be removed
 - **useRedisTime** : *( `Boolean` optional: default = `true` )* Use redis server time or us the own machine time
 - **autostart** : *( `Boolean` optional: default = `true` )* Start the heartbeat on int. Otherwise you have to call the method `.start()` of your instance.
 - **host** : *( `String` optional: default = `localhost` )* Redis host name
@@ -120,6 +121,7 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.6|2015-04-27|added option `metricExpire` to autodelete unused metrics|
 |0.0.5|2014-11-20|fixed redis key gen method and added ZSET for last active metrics|
 |0.0.3|2014-11-19|added methods `.start()`, `.stop()` and `.isActive()` |
 |0.0.2|2014-11-19|added autostart option|
@@ -130,9 +132,13 @@ Emitted on general redis error
 |Name|Description|
 |:--|:--|
 |[**systemhealth**](https://github.com/mpneuried/systemhealth)|Node module to run simple custom checks for your machine or it's connections. It will use [redis-heartbeat](https://github.com/mpneuried/redis-heartbeat) to send the current state to redis.|
-|[**node-cache**](https://github.com/tcs-de/nodecache)|Simple and fast NodeJS internal caching. Node internal in memory cache like memcached.|
 |[**rsmq**](https://github.com/smrchy/rsmq)|A really simple message queue based on Redis|
+|[**rsmq-cli**](https://github.com/mpneuried/rsmq-cli)|a terminal client for rsmq|
+|[**rest-rsmq**](https://github.com/smrchy/rest-rsmq)|REST interface for.|
+|[**redis-notifications**](https://github.com/mpneuried/redis-notifications)|A redis based notification engine. It implements the rsmq-worker to safely create notifications and recurring reports.|
+|[**node-cache**](https://github.com/tcs-de/nodecache)|Simple and fast NodeJS internal caching. Node internal in memory cache like memcached.|
 |[**redis-sessions**](https://github.com/smrchy/redis-sessions)|An advanced session store for NodeJS and Redis|
+|[**obj-schema**](https://github.com/mpneuried/obj-schema)|Simple module to validate an object by a predefined schema|
 |[**connect-redis-sessions**](https://github.com/mpneuried/connect-redis-sessions)|A connect or express middleware to simply use the [redis sessions](https://github.com/smrchy/redis-sessions). With [redis sessions](https://github.com/smrchy/redis-sessions) you can handle multiple sessions per user_id.|
 |[**task-queue-worker**](https://github.com/smrchy/task-queue-worker)|A powerful tool for background processing of tasks that are run by making standard http requests.|
 |[**soyer**](https://github.com/mpneuried/soyer)|Soyer is small lib for serverside use of Google Closure Templates with node.js.|
