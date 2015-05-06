@@ -119,7 +119,7 @@
     var HBInst = new Heartbeat( { name: "FOO", identifier: "http://www.bar.biz:4223" } );
 </code></pre></div>
 
-<p><strong>Options</strong> </p>
+<p><strong>Options</strong></p>
 
 <ul>
 <li><strong>name</strong> : <em>( <code>String</code> required )</em> The name of this current service group. E.g. "restservice"</li>
@@ -132,6 +132,7 @@
 <li><strong>metricExpire</strong> : <em>( <code>Number</code> optional: default = <code>172800</code> 2 days )</em> Time in seconds until unused metrict will automatically removed. If set to <code>0</code> the key will never be removed</li>
 <li><strong>useRedisTime</strong> : <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Use redis server time or us the own machine time</li>
 <li><strong>autostart</strong> : <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Start the heartbeat on int. Otherwise you have to call the method <code>.start()</code> of your instance.</li>
+<li><strong>localtime</strong> : <em>( <code>Boolean</code> optional: default = <code>false</code> )</em> Force the module to use the local time instead of a server independent local machine time</li>
 <li><strong>host</strong> : <em>( <code>String</code> optional: default = <code>localhost</code> )</em> Redis host name</li>
 <li><strong>port</strong> : <em>( <code>Number</code> optional: default = <code>6379</code> )</em> Redis port</li>
 <li><strong>options</strong> : <em>( <code>Object</code> optional: default = <code>{}</code> )</em> Redis options</li>
@@ -221,7 +222,7 @@
 <p>Emitted before heartbeat write.
 With this event it's possible to change the heartbeat content in operation</p>
 
-<p><strong>Arguments</strong> </p>
+<p><strong>Arguments</strong></p>
 
 <ul>
 <li><strong>identifier</strong> : <em>( <code>String</code> )</em> The current identifier</li>
@@ -239,7 +240,7 @@ With this event it's possible to change the heartbeat content in operation</p>
 <p>Emitted before metric write.
 With this event it's possible to change the heartbeat content in operation</p>
 
-<p><strong>Arguments</strong> </p>
+<p><strong>Arguments</strong></p>
 
 <ul>
 <li><strong>metric</strong> : <em>( <code>Object</code> )</em> The current machine/process metrics
@@ -287,7 +288,7 @@ With this event it's possible to change the heartbeat content in operation</p>
 
 <p>Emitted on general redis error</p>
 
-<p><strong>Arguments</strong> </p>
+<p><strong>Arguments</strong></p>
 
 <ul>
 <li><strong>err</strong> : <em>( <code>Error|String</code> )</em> The error details</li>
@@ -318,6 +319,7 @@ With this event it's possible to change the heartbeat content in operation</p>
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.8|2015-05-06|fixed time retrieval to use redis time and added a option <code>localtime</code> to force local time. By default it'll use the redis time if connected|
 |0.0.7|2015-04-27|updated dependencies|
 |0.0.6|2015-04-27|added option <code>metricExpire</code> to autodelete unused metrics|
 |0.0.5|2014-11-20|fixed redis key gen method and added ZSET for last active metrics|

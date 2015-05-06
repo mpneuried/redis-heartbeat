@@ -24,7 +24,7 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 	var HBInst = new Heartbeat( { name: "FOO", identifier: "http://www.bar.biz:4223" } );
 ```
 
-**Options** 
+**Options**
 
 - **name** : *( `String` required )* The name of this current service group. E.g. "restservice"
 - **identifier** : *( `String|Function` required )* The identifier of the current server. E.g. "http://api.myresthost.com:8080". If also possible to pass in a function that returnes the identifier.
@@ -36,6 +36,7 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 - **metricExpire** : *( `Number` optional: default = `172800` 2 days )* Time in seconds until unused metrict will automatically removed. If set to `0` the key will never be removed
 - **useRedisTime** : *( `Boolean` optional: default = `true` )* Use redis server time or us the own machine time
 - **autostart** : *( `Boolean` optional: default = `true` )* Start the heartbeat on int. Otherwise you have to call the method `.start()` of your instance.
+- **localtime** : *( `Boolean` optional: default = `false` )* Force the module to use the local time instead of a server independent local machine time
 - **host** : *( `String` optional: default = `localhost` )* Redis host name
 - **port** : *( `Number` optional: default = `6379` )* Redis port
 - **options** : *( `Object` optional: default = `{}` )* Redis options
@@ -75,7 +76,7 @@ Emitted on start of the intervals
 Emitted before heartbeat write.
 With this event it's possible to change the heartbeat content in operation
 
-**Arguments** 
+**Arguments**
 
 - **identifier** : *( `String` )* The current identifier
 
@@ -84,7 +85,7 @@ With this event it's possible to change the heartbeat content in operation
 Emitted before metric write.
 With this event it's possible to change the heartbeat content in operation
 
-**Arguments** 
+**Arguments**
 
 - **metric** : *( `Object` )* The current machine/process metrics
 	- **metric.g_cpu** : *( `Number` )* The avarage machine cpu useage for the last minute in percent
@@ -109,11 +110,11 @@ Emitted on a disconnect of redis
 
 Emitted on general redis error
 
-**Arguments** 
+**Arguments**
 
 - **err** : *( `Error|String` )* The error details
 
-## TODO 
+## TODO
 
 * add free disk space to metrics
 * add content tests
@@ -121,6 +122,7 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.8|2015-05-06|fixed time retrieval to use redis time and added a option `localtime` to force local time. By default it'll use the redis time if connected|
 |0.0.7|2015-04-27|updated dependencies|
 |0.0.6|2015-04-27|added option `metricExpire` to autodelete unused metrics|
 |0.0.5|2014-11-20|fixed redis key gen method and added ZSET for last active metrics|

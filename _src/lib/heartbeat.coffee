@@ -1,13 +1,13 @@
-# # Heartbeat
+# #Heartbeat
 # ### extends [RedisConnector](./redisconnector.coffee.html)
 #
 # ### Exports: *Class*
 #
 # Main Module to init the heartbeat to redis
-# 
+#
 
 # ### Events
-# 
+#
 # * **started**: emitted on start of heartbeat.
 # * **beforeHeartbeat**: emitted before heartbeat. With this event youre able to modify the content of the heartbeat identifier in operation.
 # * **beforeMetric**: emitted before heartbeat. With this event youre able to modify the content of the metric package.
@@ -20,13 +20,13 @@ lodash = require( "lodash" )
 
 # **internal modules**
 # [Redisconnector](./redisconnector.coffee.html)
-Redisconnector = require( "./redisconnector" ) 
+Redisconnector = require( "./redisconnector" )
 
 class Heartbeat extends Redisconnector
 
 	# ## defaults
 	defaults: =>
-		@extend super, 
+		@extend super,
 			# **name** *String* A identifier name
 			name: null
 			# **identifier** *String|Function* The heartbeat identifier content as string or function
@@ -48,9 +48,12 @@ class Heartbeat extends Redisconnector
 			useRedisTime: true
 			# **autostart** *Boolean* Start the heartbeat on init
 			autostart: true
+			# **localtime** *Boolean* Force the module to use the local time instead of a server independent local machine time
+			localtime: false
 
-	###	
-	## constructor 
+
+	###
+	## constructor
 	###
 	constructor: ( options )->
 		super
@@ -67,19 +70,19 @@ class Heartbeat extends Redisconnector
 
 	###
 	## _start
-	
+
 	`heartbeat._start()`
-	
+
 	Start the heartbeat and metric send
 
 	@return { Boolean } If it has been started. Could be `false` if the heartbeat has been already active
-	
+
 	@api private
 	###
 	_start: =>
 		# don't start a second tine
 		return false if @active
-		
+
 		@active = true
 		if not @config.name?.length
 			@_handleError( false, "ENONAME" )
@@ -104,11 +107,11 @@ class Heartbeat extends Redisconnector
 
 	###
 	## stop
-	
+
 	`heartbeat.stop()`
-	
+
 	Stop sending a heartbeat and clear all active timeouts
-	
+
 	@api public
 	###
 	stop: =>
@@ -119,13 +122,13 @@ class Heartbeat extends Redisconnector
 
 	###
 	## isActive
-	
+
 	`heartbeat.isActive()`
-	
+
 	Ask if the heartbeat is currently active
-	
-	@return { Boolean } Is heartbeat active 
-	
+
+	@return { Boolean } Is heartbeat active
+
 	@api public
 	###
 	isActive: =>
@@ -133,11 +136,11 @@ class Heartbeat extends Redisconnector
 
 	###
 	## heartbeat
-	
+
 	`heartbeat.heartbeat( id, cb )`
-	
+
 	send a heartbeat and init the timeout for the next beat
-	
+
 	@api private
 	###
 	heartbeat: =>
@@ -148,11 +151,11 @@ class Heartbeat extends Redisconnector
 
 	###
 	## heartbeat
-	
+
 	`heartbeat.heartbeat( id, cb )`
-	
+
 	send a heartbeat and init the timeout for the next beat
-	
+
 	@api private
 	###
 	metrics: =>
@@ -168,16 +171,16 @@ class Heartbeat extends Redisconnector
 
 	###
 	## _send
-	
+
 	`heartbeat._send( [cb] )`
-	
+
 	Write the heartbeat to redis
-	
+
 	@param { String } type The type to send. *( enum: "heartbeat", "metric" )*
-	@param { Function } next Function called on finish or error 
-	
+	@param { Function } next Function called on finish or error
+
 	@return { Self } itself
-	
+
 	@api private
 	###
 	_send: ( type, next )=>
@@ -197,7 +200,7 @@ class Heartbeat extends Redisconnector
 						@error( "_send: write redis", err )
 					else
 						@debug "_send: write redis", result
-					
+
 					# start next heartbeat
 					next()
 					return
@@ -207,15 +210,15 @@ class Heartbeat extends Redisconnector
 
 	###
 	## _content
-	
+
 	`heartbeat._content( cb )`
-	
+
 	Generate the heartbeat content
 
 	@param { String } type The type to send. *( enum: "heartbeat", "metric" )*
-	@param { Object } [options] Optional options. 
-	@param { Function } cb Callback function 
-	
+	@param { Object } [options] Optional options.
+	@param { Function } cb Callback function
+
 	@api private
 	###
 	_content: ( args..., cb )=>
@@ -240,7 +243,7 @@ class Heartbeat extends Redisconnector
 
 				# read the avarge load
 				[ ald1m, ald5m, ald15m ] = os.loadavg()
-				_data = 
+				_data =
 					t: ms
 					g_cpu: parseFloat( ald1m.toFixed(2) )
 					g_mem: parseFloat( ( os.freemem() / os.totalmem() * 100).toFixed(2) )
@@ -255,7 +258,7 @@ class Heartbeat extends Redisconnector
 				_statements.push [ "ZADD", @_getKey( null, @config.metricsKey ), ms, _key ]
 				_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
 				_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
-				
+
 				if @config.metricExpire > 0
 					_statements.push [ "EXPIRE", _key, @config.metricExpire ]
 
@@ -268,17 +271,17 @@ class Heartbeat extends Redisconnector
 
 	###
 	## _getTime
-	
+
 	`heartbeat._getTime( cb )`
-	
+
 	Get the current time in *ms* from local machine or from redis
-	
-	@param { Function } cb Callback function 
-	
+
+	@param { Function } cb Callback function
+
 	@api private
 	###
 	_getTime: ( cb )=>
-		if not @config.autostart
+		if @config.localtime or not @connected
 			cb( null, Date.now() )
 			return
 
@@ -287,45 +290,45 @@ class Heartbeat extends Redisconnector
 
 	###
 	## _getRedisTime
-	
+
 	`heartbeat._getRedisTime( cb )`
-	
+
 	Get the current redis time in *ms*
-	
-	@param { Function } cb Callback function 
-	
+
+	@param { Function } cb Callback function
+
 	@api private
 	###
 	_getRedisTime: ( cb )=>
 		@redis.time ( err, time )=>
 			if err
 				cb( err )
-				return		
-			
+				return
+
 			# calc miliseconds from redis seconds and nano-seconds
 			[ s, ns ] = time
 			# pad the nanoseconds
 			ns = ( "000000" + ns )[0..5]
 			ms = Math.round( (parseInt( s + ns , 10 ) / 1000 ) )
 
-			cb( null, ms ) 
+			cb( null, ms )
 			return
 		return
 
 
 	###
 	## ERRORS
-	
+
 	`apibase.ERRORS()`
-	
+
 	Error detail mappings
-	
-	@return { Object } Return A Object of error details. Format: `"ERRORCODE":[ statusCode, "Error detail" ]` 
-	
+
+	@return { Object } Return A Object of error details. Format: `"ERRORCODE":[ statusCode, "Error detail" ]`
+
 	@api private
 	###
 	ERRORS: =>
-		return @extend {}, super, 
+		return @extend {}, super,
 			"ENONAME": [ 500, "No `name` defined. The heartbeat will not be send" ]
 			"ENOIDENTIFIER": [ 500, "No `identifier` defined. The heartbeat will not be send" ]
 			"EINVALIDTYPE": [ 500, "Invalid type. Only `heartbeat` and `metrics` are allowed" ]
