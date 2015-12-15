@@ -15,3 +15,4 @@ node_js:
   - iojs
 before_script:
   - "npm install -g mocha grunt-cli"
+  - "grunt build"
