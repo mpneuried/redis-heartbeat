@@ -122,6 +122,7 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.9|2015-12-15|updated dependencies to be used with node 4.2|
 |0.0.8|2015-05-06|fixed time retrieval to use redis time and added a option `localtime` to force local time. By default it'll use the redis time if connected|
 |0.0.7|2015-04-27|updated dependencies|
 |0.0.6|2015-04-27|added option `metricExpire` to autodelete unused metrics|

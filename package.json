@@ -1,6 +1,6 @@
 {
   "name": "redis-heartbeat",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "",
   "keywords": [],
   "homepage": "https://github.com/mpneuried/redis-heartbeat",
@@ -24,20 +24,20 @@
   "license": "MIT",
   "dependencies": {
     "mpbasic": "0.0.x",
-    "redis": "0.12.x",
-    "lodash": "3.7.x"
+    "redis": "2.4.x",
+    "lodash": "3.10.x"
   },
   "optionalDependencies": {
-    "hiredis": "0.3.x"
+    "hiredis": "0.4.x"
   },
   "devDependencies": {
-    "should": "6.0.x",
+    "should": "8.0.x",
     "grunt": "0.4.x",
     "grunt-regarde": "0.1.x",
     "grunt-contrib-coffee": "0.13.x",
-    "grunt-include-replace": "3.0.x",
-    "grunt-mocha-cli": "1.13.x",
+    "grunt-include-replace": "3.2.x",
+    "grunt-mocha-cli": "2.0.x",
     "grunt-docker": "0.0.x",
-    "grunt-contrib-clean": "0.6.x"
+    "grunt-contrib-clean": "0.7.x"
   }
 }
