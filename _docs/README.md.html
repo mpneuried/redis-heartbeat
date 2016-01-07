@@ -134,6 +134,7 @@
 <li><strong>options</strong> : <em>( <code>Object</code> optional: default = <code>{}</code> )</em> Redis options</li>
 <li><strong>client</strong> : <em>( <code>RedicClient</code> optional: default = <code>null</code> )</em> It also possible to pass in a already existing redis client instance. In this case the options <code>host</code>, <code>port</code> and <code>options</code> ar ignored.</li>
 <li><strong>redisprefix</strong> : <em>( <code>String</code> optional: default = <code>{}</code> )</em> A general redis key prefix</li>
+<li><strong>diskCheckPath</strong> : <em>( <code>String</code> optional: default = <code>/</code> or <code>c:</code> for win32 )</em> The disk path to ckeck for free space. If <code>null</code> or empty this check will be skipped. More details see <a href="https://www.npmjs.com/package/diskusage">module diskusage</a></li>
 </ul>
 
 
@@ -317,7 +318,7 @@ With this event it's possible to change the heartbeat content in operation</p>
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
-|0.1.0|2016-01-07|added metric <code>p_cpu</code> to measure the process cpu load. Added optional <code>d_avail</code> with the current free disk space. Trigger <code>beforeMetric</code> even if no <code>metricsKey</code> is defined. So you can grab the data without saving it to redis (eg. writing it to elasticsearch or a queue)  |
+|0.1.0|2016-01-07|Added metric <code>p_cpu</code> to measure the process cpu load. Added optional <code>d_avail</code> with the current free disk space. Trigger <code>beforeMetric</code> even if no <code>metricsKey</code> is defined. So you can grab the data without saving it to redis (eg. writing it to elasticsearch or a queue)|
 |0.0.9|2015-12-15|updated dependencies to be used with node 4.2|
 |0.0.8|2015-05-06|fixed time retrieval to use redis time and added a option <code>localtime</code> to force local time. By default it'll use the redis time if connected|
 |0.0.7|2015-04-27|updated dependencies|

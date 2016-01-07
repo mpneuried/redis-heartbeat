@@ -346,7 +346,7 @@
 <p><strong>diskCheckPath</strong> <em>String</em> The disk path to ckeck for free space. If <code>null</code> or empty this check will be skipped. More details see <a href="https://www.npmjs.com/package/diskusage">module diskusage</a></p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-56" id="line-56">56</a>  
-<a class="line-num" href="#line-57" id="line-57">57</a>        <span class="nv">diskCheckPath: </span><span class="s">&quot;/&quot;</span>
+<a class="line-num" href="#line-57" id="line-57">57</a>        <span class="nv">diskCheckPath: </span><span class="k">if</span> <span class="nx">os</span><span class="p">.</span><span class="nx">platform</span><span class="p">()</span> <span class="o">is</span> <span class="s">&quot;win32&quot;</span> <span class="k">then</span> <span class="s">&quot;c:&quot;</span> <span class="k">else</span> <span class="s">&quot;/&quot;</span>
 <a class="line-num" href="#line-58" id="line-58">58</a>  
 <a class="line-num" href="#line-59" id="line-59">59</a>  
 <a class="line-num" href="#line-60" id="line-60">60</a>  
