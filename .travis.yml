@@ -19,6 +19,9 @@ node_js:
   - 5.0
   - 5.1
   - 5.2
+  - 5.3
+  - 5.4
+  - node
   - iojs
 before_install:
   - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
