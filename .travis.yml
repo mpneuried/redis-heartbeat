@@ -1,5 +1,12 @@
 os:
   - linux
+sudo: false
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
 services:
   - redis-server
 language: node_js
@@ -13,6 +20,8 @@ node_js:
   - 5.1
   - 5.2
   - iojs
+before_install:
+  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
 before_script:
   - "npm install -g mocha grunt-cli"
   - "grunt build"
