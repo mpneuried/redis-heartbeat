@@ -7,10 +7,6 @@ redis-heartbeat
 
 Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems.
 
-*Written in coffee-script*
-
-**INFO: all examples are written in coffee-script**
-
 ## Install
 
 ```
@@ -33,7 +29,7 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 - **intervalMetrics** : *( `Number` optional: default = `60` )* Min. interval time ( in seconds ) to send the metrics. If set `<= 0` no metrics will be written
 - **metricsKey** : *( `String` optional: default = `HB:METRICS` )* Redis key to write the machine/process metrics. If this is set to `null` no mertics will be written to redis. This could be prefixed by `redisprefix`.
 - **metricCount** : *( `Number` optional: default = `5000` )* Metrics will be saved as redis list. The list will be trimed to this length.
-- **metricExpire** : *( `Number` optional: default = `172800` 2 days )* Time in seconds until unused metrict will automatically removed. If set to `0` the key will never be removed
+- **metricExpire** : *( `Number` optional: default = `172800` 2 days )* Time in seconds until unused metric will automatically removed. If set to `0` the key will never be removed
 - **useRedisTime** : *( `Boolean` optional: default = `true` )* Use redis server time or us the own machine time
 - **autostart** : *( `Boolean` optional: default = `true` )* Start the heartbeat on int. Otherwise you have to call the method `.start()` of your instance.
 - **localtime** : *( `Boolean` optional: default = `false` )* Force the module to use the local time instead of a server independent local machine time
@@ -42,6 +38,7 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 - **options** : *( `Object` optional: default = `{}` )* Redis options
 - **client** : *( `RedicClient` optional: default = `null` )* It also possible to pass in a already existing redis client instance. In this case the options `host`, `port` and `options` ar ignored.
 - **redisprefix** : *( `String` optional: default = `{}` )* A general redis key prefix
+- **diskCheckPath** : *( `String` optional: default = `/` or `c:` for win32 )* The disk path to ckeck for free space. If `null` or empty this check will be skipped. More details see [module diskusage](https://www.npmjs.com/package/diskusage)
 
 ## Methods
 
@@ -88,15 +85,17 @@ With this event it's possible to change the heartbeat content in operation
 **Arguments**
 
 - **metric** : *( `Object` )* The current machine/process metrics
-	- **metric.g_cpu** : *( `Number` )* The avarage machine cpu useage for the last minute in percent
-	- **metric.g_mem** : *( `Number` )* The current machine memory useage in percent.
-	- **metric.g_memtotal** : *( `Number` )* The current machine memory useage in bytes.
+	- **metric.g_cpu** : *( `Number` )* The average machine cpu usage for the last minute in percent
+	- **metric.g_mem** : *( `Number` )* The current machine memory usage in percent.
+	- **metric.g_memtotal** : *( `Number` )* The current machine memory usage in bytes.
 	- **metric.p_id** : *( `Number` )* The current process id.
 	- **metric.p_uptime** : *( `Number` )* The current process uptime in seconds.
-	- **metric.p_mem** : *( `Object` )* The current machine memory useage of the process.
+	- **metric.p_cpu** : *( `Number` )* The current cpu usage of the node process.
+	- **metric.p_mem** : *( `Object` )* The current machine memory usage of the process.
 		- **metric.p_mem.heapTotal** : *( `Number` )* The current total heap in bytes.
 		- **metric.p_mem.heapUsed** : *( `Number` )* The current used heap in bytes.
 		- **metric.p_mem.rss** : *( `Number` )* The current ram usage in bytes.
+	- **metric.d_avail** : *( `Number` )* The available disk space in bytes.
 
 #### `connected`
 
@@ -122,10 +121,11 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.1.0|2016-01-07|Added metric `p_cpu` to measure the process cpu load. Added optional `d_avail` with the current free disk space. Trigger `beforeMetric` even if no `metricsKey` is defined. So you can grab the data without saving it to redis (eg. writing it to elasticsearch or a queue)|
 |0.0.9|2015-12-15|updated dependencies to be used with node 4.2|
 |0.0.8|2015-05-06|fixed time retrieval to use redis time and added a option `localtime` to force local time. By default it'll use the redis time if connected|
 |0.0.7|2015-04-27|updated dependencies|
-|0.0.6|2015-04-27|added option `metricExpire` to autodelete unused metrics|
+|0.0.6|2015-04-27|added option `metricExpire` to auto delete unused metrics|
 |0.0.5|2014-11-20|fixed redis key gen method and added ZSET for last active metrics|
 |0.0.3|2014-11-19|added methods `.start()`, `.stop()` and `.isActive()` |
 |0.0.2|2014-11-19|added autostart option|
@@ -140,13 +140,17 @@ Emitted on general redis error
 |[**rsmq-cli**](https://github.com/mpneuried/rsmq-cli)|a terminal client for rsmq|
 |[**rest-rsmq**](https://github.com/smrchy/rest-rsmq)|REST interface for.|
 |[**redis-notifications**](https://github.com/mpneuried/redis-notifications)|A redis based notification engine. It implements the rsmq-worker to safely create notifications and recurring reports.|
+|[**nsq-logger**](https://github.com/mpneuried/nsq-logger)|Nsq service to read messages from all topics listed within a list of nsqlookupd services.|
+|[**nsq-topics**](https://github.com/mpneuried/nsq-topics)|Nsq helper to poll a nsqlookupd service for all it's topics and mirror it locally.|
+|[**nsq-nodes**](https://github.com/mpneuried/nsq-nodes)|Nsq helper to poll a nsqlookupd service for all it's nodes and mirror it locally.|
+|[**nsq-watch**](https://github.com/mpneuried/nsq-watch)|Watch one or many topics for unprocessed messages.|
 |[**node-cache**](https://github.com/tcs-de/nodecache)|Simple and fast NodeJS internal caching. Node internal in memory cache like memcached.|
 |[**redis-sessions**](https://github.com/smrchy/redis-sessions)|An advanced session store for NodeJS and Redis|
 |[**obj-schema**](https://github.com/mpneuried/obj-schema)|Simple module to validate an object by a predefined schema|
 |[**connect-redis-sessions**](https://github.com/mpneuried/connect-redis-sessions)|A connect or express middleware to simply use the [redis sessions](https://github.com/smrchy/redis-sessions). With [redis sessions](https://github.com/smrchy/redis-sessions) you can handle multiple sessions per user_id.|
 |[**task-queue-worker**](https://github.com/smrchy/task-queue-worker)|A powerful tool for background processing of tasks that are run by making standard http requests.|
 |[**soyer**](https://github.com/mpneuried/soyer)|Soyer is small lib for serverside use of Google Closure Templates with node.js.|
-|[**grunt-soy-compile**](https://github.com/mpneuried/grunt-soy-compile)|Compile Goggle Closure Templates ( SOY ) templates inclding the handling of XLIFF language files.|
+|[**grunt-soy-compile**](https://github.com/mpneuried/grunt-soy-compile)|Compile Goggle Closure Templates ( SOY ) templates including the handling of XLIFF language files.|
 |[**backlunr**](https://github.com/mpneuried/backlunr)|A solution to bring Backbone Collections together with the browser fulltext search engine Lunr.js|
 
 ## The MIT License (MIT)

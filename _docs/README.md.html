@@ -90,10 +90,6 @@
 
 <p>Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems.</p>
 
-<p><em>Written in coffee-script</em></p>
-
-<p><strong>INFO: all examples are written in coffee-script</strong></p>
-
 
 <div class="pilwrap" id="install">
   <h2>
@@ -129,7 +125,7 @@
 <li><strong>intervalMetrics</strong> : <em>( <code>Number</code> optional: default = <code>60</code> )</em> Min. interval time ( in seconds ) to send the metrics. If set <code>&lt;= 0</code> no metrics will be written</li>
 <li><strong>metricsKey</strong> : <em>( <code>String</code> optional: default = <code>HB:METRICS</code> )</em> Redis key to write the machine/process metrics. If this is set to <code>null</code> no mertics will be written to redis. This could be prefixed by <code>redisprefix</code>.</li>
 <li><strong>metricCount</strong> : <em>( <code>Number</code> optional: default = <code>5000</code> )</em> Metrics will be saved as redis list. The list will be trimed to this length.</li>
-<li><strong>metricExpire</strong> : <em>( <code>Number</code> optional: default = <code>172800</code> 2 days )</em> Time in seconds until unused metrict will automatically removed. If set to <code>0</code> the key will never be removed</li>
+<li><strong>metricExpire</strong> : <em>( <code>Number</code> optional: default = <code>172800</code> 2 days )</em> Time in seconds until unused metric will automatically removed. If set to <code>0</code> the key will never be removed</li>
 <li><strong>useRedisTime</strong> : <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Use redis server time or us the own machine time</li>
 <li><strong>autostart</strong> : <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Start the heartbeat on int. Otherwise you have to call the method <code>.start()</code> of your instance.</li>
 <li><strong>localtime</strong> : <em>( <code>Boolean</code> optional: default = <code>false</code> )</em> Force the module to use the local time instead of a server independent local machine time</li>
@@ -244,15 +240,17 @@ With this event it's possible to change the heartbeat content in operation</p>
 
 <ul>
 <li><strong>metric</strong> : <em>( <code>Object</code> )</em> The current machine/process metrics
-<ul><li><strong>metric.g_cpu</strong> : <em>( <code>Number</code> )</em> The avarage machine cpu useage for the last minute in percent</li>
-<li><strong>metric.g_mem</strong> : <em>( <code>Number</code> )</em> The current machine memory useage in percent.</li>
-<li><strong>metric.g_memtotal</strong> : <em>( <code>Number</code> )</em> The current machine memory useage in bytes.</li>
+<ul><li><strong>metric.g_cpu</strong> : <em>( <code>Number</code> )</em> The average machine cpu usage for the last minute in percent</li>
+<li><strong>metric.g_mem</strong> : <em>( <code>Number</code> )</em> The current machine memory usage in percent.</li>
+<li><strong>metric.g_memtotal</strong> : <em>( <code>Number</code> )</em> The current machine memory usage in bytes.</li>
 <li><strong>metric.p_id</strong> : <em>( <code>Number</code> )</em> The current process id.</li>
 <li><strong>metric.p_uptime</strong> : <em>( <code>Number</code> )</em> The current process uptime in seconds.</li>
-<li><strong>metric.p_mem</strong> : <em>( <code>Object</code> )</em> The current machine memory useage of the process.
+<li><strong>metric.p_cpu</strong> : <em>( <code>Number</code> )</em> The current cpu usage of the node process.</li>
+<li><strong>metric.p_mem</strong> : <em>( <code>Object</code> )</em> The current machine memory usage of the process.
 <ul><li><strong>metric.p_mem.heapTotal</strong> : <em>( <code>Number</code> )</em> The current total heap in bytes.</li>
 <li><strong>metric.p_mem.heapUsed</strong> : <em>( <code>Number</code> )</em> The current used heap in bytes.</li>
-<li><strong>metric.p_mem.rss</strong> : <em>( <code>Number</code> )</em> The current ram usage in bytes.</li></ul></li></ul></li>
+<li><strong>metric.p_mem.rss</strong> : <em>( <code>Number</code> )</em> The current ram usage in bytes.</li></ul></li>
+<li><strong>metric.d_avail</strong> : <em>( <code>Number</code> )</em> The available disk space in bytes.</li></ul></li>
 </ul>
 
 
@@ -319,9 +317,11 @@ With this event it's possible to change the heartbeat content in operation</p>
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
+|0.1.0|2016-01-07|added metric <code>p_cpu</code> to measure the process cpu load. Added optional <code>d_avail</code> with the current free disk space. Trigger <code>beforeMetric</code> even if no <code>metricsKey</code> is defined. So you can grab the data without saving it to redis (eg. writing it to elasticsearch or a queue)  |
+|0.0.9|2015-12-15|updated dependencies to be used with node 4.2|
 |0.0.8|2015-05-06|fixed time retrieval to use redis time and added a option <code>localtime</code> to force local time. By default it'll use the redis time if connected|
 |0.0.7|2015-04-27|updated dependencies|
-|0.0.6|2015-04-27|added option <code>metricExpire</code> to autodelete unused metrics|
+|0.0.6|2015-04-27|added option <code>metricExpire</code> to auto delete unused metrics|
 |0.0.5|2014-11-20|fixed redis key gen method and added ZSET for last active metrics|
 |0.0.3|2014-11-19|added methods <code>.start()</code>, <code>.stop()</code> and <code>.isActive()</code> |
 |0.0.2|2014-11-19|added autostart option|
@@ -343,13 +343,17 @@ With this event it's possible to change the heartbeat content in operation</p>
 |<a href="https://github.com/mpneuried/rsmq-cli"><strong>rsmq-cli</strong></a>|a terminal client for rsmq|
 |<a href="https://github.com/smrchy/rest-rsmq"><strong>rest-rsmq</strong></a>|REST interface for.|
 |<a href="https://github.com/mpneuried/redis-notifications"><strong>redis-notifications</strong></a>|A redis based notification engine. It implements the rsmq-worker to safely create notifications and recurring reports.|
+|<a href="https://github.com/mpneuried/nsq-logger"><strong>nsq-logger</strong></a>|Nsq service to read messages from all topics listed within a list of nsqlookupd services.|
+|<a href="https://github.com/mpneuried/nsq-topics"><strong>nsq-topics</strong></a>|Nsq helper to poll a nsqlookupd service for all it's topics and mirror it locally.|
+|<a href="https://github.com/mpneuried/nsq-nodes"><strong>nsq-nodes</strong></a>|Nsq helper to poll a nsqlookupd service for all it's nodes and mirror it locally.|
+|<a href="https://github.com/mpneuried/nsq-watch"><strong>nsq-watch</strong></a>|Watch one or many topics for unprocessed messages.|
 |<a href="https://github.com/tcs-de/nodecache"><strong>node-cache</strong></a>|Simple and fast NodeJS internal caching. Node internal in memory cache like memcached.|
 |<a href="https://github.com/smrchy/redis-sessions"><strong>redis-sessions</strong></a>|An advanced session store for NodeJS and Redis|
 |<a href="https://github.com/mpneuried/obj-schema"><strong>obj-schema</strong></a>|Simple module to validate an object by a predefined schema|
 |<a href="https://github.com/mpneuried/connect-redis-sessions"><strong>connect-redis-sessions</strong></a>|A connect or express middleware to simply use the <a href="https://github.com/smrchy/redis-sessions">redis sessions</a>. With <a href="https://github.com/smrchy/redis-sessions">redis sessions</a> you can handle multiple sessions per user_id.|
 |<a href="https://github.com/smrchy/task-queue-worker"><strong>task-queue-worker</strong></a>|A powerful tool for background processing of tasks that are run by making standard http requests.|
 |<a href="https://github.com/mpneuried/soyer"><strong>soyer</strong></a>|Soyer is small lib for serverside use of Google Closure Templates with node.js.|
-|<a href="https://github.com/mpneuried/grunt-soy-compile"><strong>grunt-soy-compile</strong></a>|Compile Goggle Closure Templates ( SOY ) templates inclding the handling of XLIFF language files.|
+|<a href="https://github.com/mpneuried/grunt-soy-compile"><strong>grunt-soy-compile</strong></a>|Compile Goggle Closure Templates ( SOY ) templates including the handling of XLIFF language files.|
 |<a href="https://github.com/mpneuried/backlunr"><strong>backlunr</strong></a>|A solution to bring Backbone Collections together with the browser fulltext search engine Lunr.js|</p>
 
 

@@ -1,6 +1,6 @@
 {
   "name": "redis-heartbeat",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "",
   "keywords": [],
   "homepage": "https://github.com/mpneuried/redis-heartbeat",
@@ -23,9 +23,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "diskusage": "0.1.x",
+    "lodash": "3.10.x",
     "mpbasic": "0.0.x",
     "redis": "2.4.x",
-    "lodash": "3.10.x"
+    "usage": "0.7.x"
   },
   "optionalDependencies": {
     "hiredis": "0.4.x"

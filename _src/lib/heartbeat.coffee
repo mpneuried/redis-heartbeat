@@ -17,6 +17,8 @@ os = require( "os" )
 
 # **npm modules**
 lodash = require( "lodash" )
+usage = require( "usage" )
+disk = require( "diskusage" )
 
 # **internal modules**
 # [Redisconnector](./redisconnector.coffee.html)
@@ -50,6 +52,8 @@ class Heartbeat extends Redisconnector
 			autostart: true
 			# **localtime** *Boolean* Force the module to use the local time instead of a server independent local machine time
 			localtime: false
+			# **diskCheckPath** *String* The disk path to ckeck for free space. If `null` or empty this check will be skipped. More details see [module diskusage](https://www.npmjs.com/package/diskusage)
+			diskCheckPath: if os.platform() is "win32" then "c:" else "/"
 
 
 	###
@@ -94,8 +98,8 @@ class Heartbeat extends Redisconnector
 
 		# generate send functions
 		@_sendHeartbeat = @_send( "heartbeat", @heartbeat )
-		if @config.metricsKey and @config.intervalMetrics > 0
-			@debug "_start: metrics deactivated"
+		if @config.intervalMetrics > 0
+			@debug "_start: metrics"
 			@_sendMetrics = @_send( "metric", @metrics )
 
 		# send the data for the fist time
@@ -193,7 +197,11 @@ class Heartbeat extends Redisconnector
 					# start next heartbeat
 					next()
 					return
-
+				
+				if not rStmnts?.length
+					next()
+					return
+					
 				@debug "send `#{type}`", rStmnts
 				@redis.multi( rStmnts ).exec ( err, result )=>
 					if err
@@ -229,46 +237,91 @@ class Heartbeat extends Redisconnector
 				cb( err )
 				return
 
-			_statements = []
-			_key = @_getKey( @config.name, @config.heartbeatKey )
-			_iden = lodash.result( @config, "identifier" )
 			if type is "heartbeat"
+				_statements = []
+				_key = @_getKey( @config.name, @config.heartbeatKey )
+				_iden = lodash.result( @config, "identifier" )
 				@emit "beforeHeartbeat", _iden
 				_statements.push [ "ZADD", _key, ms, _iden ]
 				cb( null, _statements )
 				return
 
 			if type is "metric"
-				_key = @_getKey( _iden, @config.metricsKey )
-
-				# read the avarge load
-				[ ald1m, ald5m, ald15m ] = os.loadavg()
-				_data =
-					t: ms
-					g_cpu: parseFloat( ald1m.toFixed(2) )
-					g_mem: parseFloat( ( os.freemem() / os.totalmem() * 100).toFixed(2) )
-					g_memtotal: os.totalmem()
-					p_mem: process.memoryUsage()
-					p_id: process.pid
-					p_uptime: process.uptime()
-
-				@emit "beforeMetric", _data
-				_sData = JSON.stringify( _data )
-				_statements.push [ "LPUSH", _key, _sData ]
-				_statements.push [ "ZADD", @_getKey( null, @config.metricsKey ), ms, _key ]
-				_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
-				_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
-
-				if @config.metricExpire > 0
-					_statements.push [ "EXPIRE", _key, @config.metricExpire ]
-
-				cb( null, _statements )
+				usage.lookup process.pid, (err, _usage)=>
+					if err
+						cb( err )
+						return
+					
+					if not @config.diskCheckPath?.length
+						@_createAndSaveMetricObj( ms, _usage, null, options, cb )
+						return
+						
+					disk.check @config.diskCheckPath, (err, _disk)=>
+						if err
+							cb( err )
+							return
+						
+						@_createAndSaveMetricObj( ms, _usage, _disk, options, cb )
+						return
+					return
 				return
 
 			@_handleError( cb, "EINVALIDTYPE" )
 			return
 		return
+	
+	###
+	## _createAndSaveMetricObj
 
+	`heartbeat._createAndSaveMetricObj( cb )`
+
+	internal helper method to capulate teh metic obj creation
+
+	@param { Number } current time in ms
+	@param { Object } usage results
+	@param { Object|Null } disk results
+	@param { Object } [options] Optional options.
+	@param { Function } cb Callback function
+
+	@api private
+	###
+	_createAndSaveMetricObj: ( ms, _usage, _disk, options, cb )=>
+		# read the avarge load
+		[ ald1m, ald5m, ald15m ] = os.loadavg()
+		_data =
+			t: ms
+			g_cpu: parseFloat( ald1m.toFixed(2) )
+			g_mem: parseFloat( ( os.freemem() / os.totalmem() * 100).toFixed(2) )
+			g_memtotal: os.totalmem()
+			p_id: process.pid
+			p_uptime: process.uptime()
+			p_mem: _usage.memory
+			p_cpu: _usage.cpu
+		
+		_data.d_avail = _disk.available if _disk?
+		
+		@emit "beforeMetric", _data
+		
+		# exit silent if no metricsKey was defined
+		if not @config.metricsKey
+			cb( null, null )
+			return
+		
+		_statements = []
+		_iden = lodash.result( @config, "identifier" )
+		_key = @_getKey( _iden, @config.metricsKey )
+			
+		_sData = JSON.stringify( _data )
+		_statements.push [ "LPUSH", _key, _sData ]
+		_statements.push [ "ZADD", @_getKey( null, @config.metricsKey ), ms, _key ]
+		_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
+		_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
+
+		if @config.metricExpire > 0
+			_statements.push [ "EXPIRE", _key, @config.metricExpire ]
+
+		cb( null, _statements )
+		return
 	###
 	## _getTime
 
