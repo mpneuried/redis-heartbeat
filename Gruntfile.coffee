@@ -39,7 +39,7 @@ module.exports = (grunt) ->
 			options:
 				require: [ "should" ]
 				reporter: "spec"
-				bail: false
+				bail: if process.env.BAIL then true else false
 				timeout: 3000
 				slow: 3
 

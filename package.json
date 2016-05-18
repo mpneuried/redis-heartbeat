@@ -16,7 +16,7 @@
     "url": "https://github.com/mpneuried/redis-heartbeat.git"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "mocha -r should -t 3000 test/main.js"
   },
   "engines": {
     "node": ">= 0.10.0"
