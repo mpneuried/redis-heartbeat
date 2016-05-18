@@ -7,6 +7,38 @@ METRICKEYS = ["t", "g_cpu", "g_mem", "g_memtotal", "p_id", "p_uptime", "p_mem", 
 
 describe "----- Module TESTS -----", ->
 
+	describe 'Create Instance', ->
+
+		it "without any options", ( done )->
+			_hb = new Heartbeat( autostart: false )
+			_hb.on "error", ( _err )->
+				_err.name.should.equal( "ENONAME" )
+				done()
+				return
+			_hb.start()
+			return
+
+		it "without identifier option", ->
+			_hb = new Heartbeat( { name: "FAIL", autostart: false } )
+			_hb.on "error", ( _err )->
+				_err.name.should.equal( "ENOIDENTIFIER" )
+				done()
+				return
+			_hb.start()
+			return
+
+		it "without name option", ->
+			_hb = new Heartbeat( { identifier: "explode", autostart: false } )
+			_hb.on "error", ( _err )->
+				_err.name.should.equal( "ENONAME" )
+				done()
+				return
+			_hb.start()
+			return
+
+		return
+
+
 	describe 'Main Tests', ->
 		_hb = null
 		_ident = "bar:4223"
