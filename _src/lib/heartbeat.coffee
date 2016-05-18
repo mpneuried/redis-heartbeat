@@ -18,7 +18,8 @@ os = require( "os" )
 # **npm modules**
 _isFunction = require( "lodash/isFunction" )
 _result = require( "lodash/result" )
-usage = require( "usage" )
+if os.platform() isnt "win32"
+	usage = require( "usage" )
 disk = require( "diskusage" )
 
 # **internal modules**
@@ -92,11 +93,11 @@ class Heartbeat extends Redisconnector
 
 		@active = true
 		if not @config.name?.length
-			@_handleError( false, "ENONAME" )
+			@emit "error", @_handleError( true, "ENONAME" )
 			return
 
 		if not _isFunction( @config.identifier ) and not @config.identifier?.length
-			@_handleError( false, "ENOIDENTIFIER" )
+			@emit "error", @_handleError( true, "ENOIDENTIFIER" )
 			return
 
 		# generate send functions
@@ -268,7 +269,7 @@ class Heartbeat extends Redisconnector
 				return
 
 			if type is "metric"
-				usage.lookup process.pid, (err, _usage)=>
+				@_getUsage (err, _usage)=>
 					if err
 						cb( err )
 						return
@@ -287,8 +288,36 @@ class Heartbeat extends Redisconnector
 					return
 				return
 
-			@_handleError( cb, "EINVALIDTYPE" )
+			_err = @_handleError( true, "EINVALIDTYPE" )
+			@emit( "error", _err )
+			cb( _err )
 			return
+		return
+
+	###
+	## _getUsage
+
+	`heartbeat._getUsage( cb )`
+
+	Internal helper to read the process cpu and memory usage if usage is availible.
+	Within Windows System it's not availible.
+
+	@param { Function } cb Callback function
+
+	@api private
+	###
+	_getUsage: ( cb )=>
+		if usage?
+			usage.lookup process.pid, (err, _usage)=>
+				if err
+					cb( err )
+					return
+				cb( null, _usage )
+				return
+			return
+
+		# in case of a windown machine we can't read the process usage
+		cb( null, null )
 		return
 	
 	###
@@ -316,8 +345,8 @@ class Heartbeat extends Redisconnector
 			g_memtotal: os.totalmem()
 			p_id: process.pid
 			p_uptime: process.uptime()
-			p_mem: _usage.memory
-			p_cpu: _usage.cpu
+			p_mem: _usage?.memory
+			p_cpu: _usage?.cpu
 		
 		_data.d_avail = _disk.available if _disk?
 		
