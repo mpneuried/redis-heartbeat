@@ -62,6 +62,11 @@ Ask if the heartbeat is currently active.
 
 *( Booelan )*: Haertbeat is active
 
+#### `.quit()`
+
+Stop the heartbeat anc close the internal connection to redis.  
+After this this instance cannot be reused.
+
 ## Events
 
 #### `started`

@@ -8,15 +8,16 @@
 
 # ### Events
 #
-# * **started**: emitted on start of heartbeat.
-# * **beforeHeartbeat**: emitted before heartbeat. With this event youre able to modify the content of the heartbeat identifier in operation.
-# * **beforeMetric**: emitted before heartbeat. With this event youre able to modify the content of the metric package.
+# * **started**: 	ted on start of heartbeat.
+# * **beforeHeartbeat**: 	ted before heartbeat. With this event youre able to modify the content of the heartbeat identifier in operation.
+# * **beforeMetric**: 	ted before heartbeat. With this event youre able to modify the content of the metric package.
 
 # **node modules**
 os = require( "os" )
 
 # **npm modules**
-lodash = require( "lodash" )
+_isFunction = require( "lodash/isFunction" )
+_result = require( "lodash/result" )
 usage = require( "usage" )
 disk = require( "diskusage" )
 
@@ -38,6 +39,8 @@ class Heartbeat extends Redisconnector
 			intervalHeartbeat: 5
 			# **heartbeatKey** *String* Key prefix for the alive heartbeat
 			heartbeatKey: "HB"
+			# **heartbeatExpire** *Number* Time in seconds until unused heartbeat will automatically removed. If set to `0` the key will never be removed
+			heartbeatExpire: 60*60*24*2
 			# **intervalMetrics** *Number* Interval in seconds to write server metrics to redis. If set `<= 0` no metrics will be written
 			intervalMetrics: 60
 			# **metricsKey** *String* Key prefix for the metrics key. If this is set to `null` no mertics will be written to redis
@@ -92,7 +95,7 @@ class Heartbeat extends Redisconnector
 			@_handleError( false, "ENONAME" )
 			return
 
-		if not lodash.isFunction( @config.identifier ) and not @config.identifier?.length
+		if not _isFunction( @config.identifier ) and not @config.identifier?.length
 			@_handleError( false, "ENOIDENTIFIER" )
 			return
 
@@ -123,6 +126,22 @@ class Heartbeat extends Redisconnector
 		clearTimeout( @_timerHeartbeat ) if @_timerHeartbeat
 		clearTimeout( @_timerMetrics ) if @_timerMetrics
 		return
+
+	###
+	## quit
+
+	`heartbeat.quit()`
+
+	Stop sending a heartbeat, clear all active timeouts and close the connection to redis.
+	After this this instance cannot be reused.
+
+	@api public
+	###
+	quit: =>
+		@stop()
+		@redis.quit()
+		return
+
 
 	###
 	## isActive
@@ -240,9 +259,11 @@ class Heartbeat extends Redisconnector
 			if type is "heartbeat"
 				_statements = []
 				_key = @_getKey( @config.name, @config.heartbeatKey )
-				_iden = lodash.result( @config, "identifier" )
+				_iden = _result( @config, "identifier" )
 				@emit "beforeHeartbeat", _iden
 				_statements.push [ "ZADD", _key, ms, _iden ]
+				if @config.heartbeatExpire > 0
+					_statements.push [ "EXPIRE", _key, @config.heartbeatExpire ]
 				cb( null, _statements )
 				return
 
@@ -308,7 +329,7 @@ class Heartbeat extends Redisconnector
 			return
 		
 		_statements = []
-		_iden = lodash.result( @config, "identifier" )
+		_iden = _result( @config, "identifier" )
 		_key = @_getKey( _iden, @config.metricsKey )
 			
 		_sData = JSON.stringify( _data )

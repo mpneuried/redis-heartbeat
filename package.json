@@ -24,22 +24,21 @@
   "license": "MIT",
   "dependencies": {
     "diskusage": "0.1.x",
-    "lodash": "3.10.x",
+    "lodash": "4.x",
     "mpbasic": "0.0.x",
-    "redis": "2.4.x",
+    "redis": "^2.6.0-2",
     "usage": "0.7.x"
   },
   "optionalDependencies": {
     "hiredis": "0.4.x"
   },
   "devDependencies": {
-    "should": "8.0.x",
-    "grunt": "0.4.x",
-    "grunt-regarde": "0.1.x",
-    "grunt-contrib-coffee": "0.13.x",
-    "grunt-include-replace": "3.2.x",
-    "grunt-mocha-cli": "2.0.x",
-    "grunt-docker": "0.0.x",
-    "grunt-contrib-clean": "0.7.x"
+    "should": "8.3.x",
+    "grunt": "1.0.x",
+    "grunt-contrib-watch": "1.0.x",
+    "grunt-contrib-coffee": "1.0.x",
+    "grunt-include-replace": "4.0.x",
+    "grunt-contrib-clean": "1.0.x",
+    "grunt-mocha-cli": "2.1.x"
   }
 }
