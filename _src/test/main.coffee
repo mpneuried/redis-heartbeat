@@ -1,7 +1,7 @@
 should = require('should')
 
-Heartbeat = require( "../." ) 
-redis = require( "redis" ) 
+Heartbeat = require( "../." )
+redis = require( "redis" )
 
 METRICKEYS = ["t", "g_cpu", "g_mem", "g_memtotal", "p_id", "p_uptime", "p_mem", "p_cpu"]
 
@@ -14,24 +14,27 @@ describe "----- Module TESTS -----", ->
 			_hb.on "error", ( _err )->
 				_err.name.should.equal( "ENONAME" )
 				done()
+				_hb.removeAllListeners()
 				return
 			_hb.start()
 			return
 
-		it "without identifier option", ->
+		it "without identifier option", ( done )->
 			_hb = new Heartbeat( { name: "FAIL", autostart: false } )
 			_hb.on "error", ( _err )->
 				_err.name.should.equal( "ENOIDENTIFIER" )
 				done()
+				_hb.removeAllListeners()
 				return
 			_hb.start()
 			return
 
-		it "without name option", ->
+		it "without name option", ( done )->
 			_hb = new Heartbeat( { identifier: "explode", autostart: false } )
 			_hb.on "error", ( _err )->
 				_err.name.should.equal( "ENONAME" )
 				done()
+				_hb.removeAllListeners()
 				return
 			_hb.start()
 			return
@@ -44,12 +47,13 @@ describe "----- Module TESTS -----", ->
 		_ident = "bar:4223"
 		before ( done )->
 			_hb = new Heartbeat( { name: "FOO", identifier: _ident, intervalHeartbeat: 1, intervalMetrics: 5, metricCount: 10 } )
-			# TODO add initialisation Code
+			_hb.on "error", ( _err )->
+				console.error( "ERROR", _err )
+				return
 			done()
 			return
 
 		after ( done )->
-			#  TODO teardown
 			_hb.quit()
 			done()
 			return
@@ -60,12 +64,12 @@ describe "----- Module TESTS -----", ->
 			_cH = 0
 			_cM = 0
 
-			_hb.on "beforeHeartbeat", ( ident )-> 
+			_hb.on "beforeHeartbeat", ( ident )->
 				_cH++
 				ident.should.equal( _ident )
 				return
 
-			_hb.on "beforeMetric", ( metric )-> 
+			_hb.on "beforeMetric", ( metric )->
 				_cM++
 				metric.should.have.properties( METRICKEYS )
 				return
@@ -85,14 +89,15 @@ describe "----- Module TESTS -----", ->
 		_ident = "foo:1337"
 
 		before ( done )->
-			_cli = redis.createClient() 
+			_cli = redis.createClient()
 			_hb = new Heartbeat( { metricExpire: 10, heartbeatExpire: 10, name: "BAR", identifier: _ident, intervalHeartbeat: 1, intervalMetrics: 5, metricCount: 10, client: _cli } )
-			# TODO add initialisation Code
+			_hb.on "error", ( _err )->
+				console.error( "ERROR", _err )
+				return
 			done()
 			return
 
 		after ( done )->
-			#  TODO teardown
 			_hb.quit()
 			done()
 			return
@@ -103,12 +108,12 @@ describe "----- Module TESTS -----", ->
 			_cH = 0
 			_cM = 0
 
-			_hb.on "beforeHeartbeat", ( ident )-> 
+			_hb.on "beforeHeartbeat", ( ident )->
 				_cH++
 				ident.should.equal( _ident )
 				return
 
-			_hb.on "beforeMetric", ( metric )-> 
+			_hb.on "beforeMetric", ( metric )->
 				_cM++
 				metric.should.have.properties( METRICKEYS )
 				return

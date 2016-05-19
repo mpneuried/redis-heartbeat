@@ -140,6 +140,7 @@ class Heartbeat extends Redisconnector
 	###
 	quit: =>
 		@stop()
+		@removeAllListeners()
 		@redis.quit()
 		return
 
@@ -306,9 +307,9 @@ class Heartbeat extends Redisconnector
 
 	@api private
 	###
-	_getUsage: ( cb )=>
+	_getUsage: ( cb )->
 		if usage?
-			usage.lookup process.pid, (err, _usage)=>
+			usage.lookup process.pid, (err, _usage)->
 				if err
 					cb( err )
 					return
@@ -403,7 +404,7 @@ class Heartbeat extends Redisconnector
 	@api private
 	###
 	_getRedisTime: ( cb )=>
-		@redis.time ( err, time )=>
+		@redis.time ( err, time )->
 			if err
 				cb( err )
 				return

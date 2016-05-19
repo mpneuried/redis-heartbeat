@@ -135,6 +135,7 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.2.1|2016-05-19|optimized tests and event handling on quit|
 |0.2.0|2016-05-18|usable from windows; added error event; updated dependencies; better tests|
 |0.1.0|2016-01-07|Added metric `p_cpu` to measure the process cpu load. Added optional `d_avail` with the current free disk space. Trigger `beforeMetric` even if no `metricsKey` is defined. So you can grab the data without saving it to redis (eg. writing it to elasticsearch or a queue)|
 |0.0.9|2015-12-15|updated dependencies to be used with node 4.2|
