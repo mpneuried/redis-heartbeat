@@ -4,14 +4,14 @@ sudo: false
 addons:
   apt:
     sources:
-    - ubuntu-toolchain-r-test
+      - ubuntu-toolchain-r-test
     packages:
-    - g++-4.8
+      - g++-4.8
 services:
   - redis-server
 language: node_js
 node_js:
- - 0.10
+  - 0.10
   - 0.12
   - 4.0
   - 4.4
