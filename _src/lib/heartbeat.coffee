@@ -90,8 +90,8 @@ class Heartbeat extends Redisconnector
 	_start: =>
 		# don't start a second tine
 		return false if @active
-
 		@active = true
+
 		if not @config.name?.length
 			@emit "error", @_handleError( true, "ENONAME" )
 			return
@@ -101,13 +101,21 @@ class Heartbeat extends Redisconnector
 			return
 
 		# generate send functions
-		@_sendHeartbeat = @_send( "heartbeat", @heartbeat )
+		if @config.intervalHeartbeat > 0
+			@debug "_start: heartbeat"
+			@_sendHeartbeat = @_send( "heartbeat", @heartbeat )
+
 		if @config.intervalMetrics > 0
 			@debug "_start: metrics"
 			@_sendMetrics = @_send( "metric", @metrics )
 
+		if not @_sendHeartbeat? and not @_sendMetrics?
+			@active = false
+			@debug "module disabled"
+			return false
+
 		# send the data for the fist time
-		@_sendHeartbeat()
+		@_sendHeartbeat() if @_sendHeartbeat?
 		@_sendMetrics() if @_sendMetrics?
 
 		@emit "started"
@@ -170,6 +178,11 @@ class Heartbeat extends Redisconnector
 	###
 	heartbeat: =>
 		return if not @active
+		# silent stop if function not exists or a invalid intervall has been defined
+		if not @_sendHeartbeat? or @config.intervalHeartbeat <= 0
+			@debug "heartbeat: deactivated"
+			return
+		
 		clearTimeout( @_timerHeartbeat ) if @_timerHeartbeat
 		@_timerHeartbeat = setTimeout( @_sendHeartbeat, @config.intervalHeartbeat * 1000 )
 		return
@@ -187,7 +200,7 @@ class Heartbeat extends Redisconnector
 		return if not @active
 		# silent stop if function not exists or a invalid intervall has been defined
 		if not @_sendMetrics? or @config.intervalMetrics <= 0
-			@debug "metrics: metrics deactivated"
+			@debug "metrics: deactivated"
 			return
 
 		clearTimeout( @_timerMetrics ) if @_timerMetrics

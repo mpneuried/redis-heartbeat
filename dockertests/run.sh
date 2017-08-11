@@ -3,8 +3,9 @@ VERSIONS[1]=0.12
 VERSIONS[2]=4
 VERSIONS[3]=5
 VERSIONS[4]=6
-VERSIONS[5]=lts
-VERSIONS[6]=latest
+VERSIONS[5]=8
+VERSIONS[6]=lts
+VERSIONS[7]=latest
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

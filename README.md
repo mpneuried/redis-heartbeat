@@ -2,9 +2,12 @@ redis-heartbeat
 ===============
 
 [![Build Status](https://secure.travis-ci.org/mpneuried/redis-heartbeat.png?branch=master)](http://travis-ci.org/mpneuried/redis-heartbeat)
-[![Windows Tests](https://img.shields.io/appveyor/ci/mpneuried/redis-heartbeat.svg?label=Windows%20Test)]()
-[![Build Status](https://david-dm.org/mpneuried/redis-heartbeat.png)](https://david-dm.org/mpneuried/redis-heartbeat)
-[![NPM version](https://badge.fury.io/js/redis-heartbeat.png)](http://badge.fury.io/js/redis-heartbeat)
+[![Windows Tests](https://img.shields.io/appveyor/ci/mpneuried/redis-heartbeat.svg?label=WindowsTest)](https://ci.appveyor.com/project/mpneuried/redis-heartbeat)
+[![Coveralls Coverage](https://img.shields.io/coveralls/mpneuried/redis-heartbeat.svg)](https://coveralls.io/github/mpneuried/redis-heartbeat)
+
+[![Deps Status](https://david-dm.org/mpneuried/redis-heartbeat.png)](https://david-dm.org/mpneuried/redis-heartbeat)
+[![npm version](https://badge.fury.io/js/redis-heartbeat.png)](http://badge.fury.io/js/redis-heartbeat)
+[![npm downloads](https://img.shields.io/npm/dt/redis-heartbeat.svg?maxAge=2592000)](https://nodei.co/npm/redis-heartbeat/)
 
 Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems.
 
@@ -28,7 +31,7 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 
 - **name** : *( `String` required )* The name of this current service group. E.g. "restservice"
 - **identifier** : *( `String|Function` required )* The identifier of the current server. E.g. "http://api.myresthost.com:8080". If also possible to pass in a function that returnes the identifier.
-- **intervalHeartbeat** : *( `Number` optional: default = `5` )* Min. interval time ( in seconds ) to send the heartbeat
+- **intervalHeartbeat** : *( `Number` optional: default = `5` )* Min. interval time ( in seconds ) to send the heartbeat. If set `<= 0` the heartbeat will be deactivated.
 - **heartbeatKey** : *( `String` optional: default = `HB` )* Redis key to write the heartbeat. This could be prefixed by `redisprefix`.
 - **heartbeatExpire** : *( `Number` optional: default = `172800` 2 days )* Time in seconds until unused heartbeat will automatically removed. If set to `0` the key will never be removed
 - **intervalMetrics** : *( `Number` optional: default = `60` )* Min. interval time ( in seconds ) to send the metrics. If set `<= 0` no metrics will be written
@@ -135,6 +138,7 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.0|2017-08-11|be able to disable heartbeat with `intervalHeartbeat = 0`; updated deps; added coverage report|
 |0.2.1|2016-05-19|optimized tests and event handling on quit|
 |0.2.0|2016-05-18|usable from windows; added error event; updated dependencies; better tests|
 |0.1.0|2016-01-07|Added metric `p_cpu` to measure the process cpu load. Added optional `d_avail` with the current free disk space. Trigger `beforeMetric` even if no `metricsKey` is defined. So you can grab the data without saving it to redis (eg. writing it to elasticsearch or a queue)|

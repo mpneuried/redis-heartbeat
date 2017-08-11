@@ -19,3 +19,5 @@ deploy.json
 /_src
 /_docs
 Gruntfile.*
+
+/coverage

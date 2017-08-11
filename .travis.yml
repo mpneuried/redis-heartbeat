@@ -20,10 +20,15 @@ node_js:
   - 5.11
   - 6.0
   - 6.1
+  - 6.11
+  - 8.3
   - iojs
   - node
-before_install:
-  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
+install: npm install
 before_script:
-  - "npm install -g mocha grunt-cli"
+  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
+  - "npm install -g grunt-cli"
   - "grunt build"
+after_success:
+  - ./node_modules/.bin/istanbul report text-summary lcov
+  - cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
