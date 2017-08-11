@@ -26,7 +26,6 @@ node_js:
   - node
 install: npm install
 before_script:
-  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
   - "npm install -g grunt-cli"
   - "grunt build"
 after_success:
