@@ -6,9 +6,9 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-11
+      - g++-4.9
 env:
-  - CXX=g++-11
+  - CXX=g++-4.9
 services:
   - redis-server
 language: node_js
