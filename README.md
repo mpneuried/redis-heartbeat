@@ -138,6 +138,7 @@ Emitted on general redis error
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.1|2017-09-05|fixed compiled files|
 |0.3.0|2017-08-11|be able to disable heartbeat with `intervalHeartbeat = 0`; updated deps; added coverage report|
 |0.2.1|2016-05-19|optimized tests and event handling on quit|
 |0.2.0|2016-05-18|usable from windows; added error event; updated dependencies; better tests|
