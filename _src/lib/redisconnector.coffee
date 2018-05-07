@@ -25,7 +25,7 @@ class RedisConnector extends require( "mpbasic" )()
 
 	# ## defaults
 	defaults: =>
-		return @extend super, 
+		return @extend super( arguments... ), 
 			# **host** *String* Redis host name
 			host: "localhost"
 			# **port** *Number* Redis port
@@ -42,7 +42,8 @@ class RedisConnector extends require( "mpbasic" )()
 	## constructor 
 	###
 	constructor: ->
-		super
+		super( arguments... )
+
 		# define the `connected` flag
 		@connected = false
 		return

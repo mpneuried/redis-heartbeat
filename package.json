@@ -25,27 +25,22 @@
   },
   "license": "MIT",
   "dependencies": {
-    "diskusage": "^0.2.2",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.10",
     "mpbasic": "0.0.x",
-    "redis": "^2.8.0",
-    "usage": "0.7.x"
-  },
-  "optionalDependencies": {
-    "hiredis": "0.5.x"
+    "redis": "^2.8.0"
   },
   "devDependencies": {
-    "should": "11.2.x",
-    "grunt": "1.0.x",
-    "grunt-contrib-watch": "1.0.x",
-    "grunt-contrib-coffee": "1.0.x",
-    "grunt-include-replace": "5.0.x",
-    "grunt-contrib-clean": "1.1.x",
-    "grunt-mocha-cli": "3.0.x",
-    "coveralls": "2.x",
+    "coffee-coverage": "3.x",
     "coffee-script": "1.x",
-    "coffee-coverage": "2.x",
+    "coveralls": "3.x",
+    "grunt": "^1.0.2",
+    "grunt-contrib-clean": "1.1.x",
+    "grunt-contrib-coffee": "2.0.x",
+    "grunt-contrib-watch": "^1.0.1",
+    "grunt-include-replace": "5.0.x",
+    "grunt-mocha-cli": "4.0.x",
     "istanbul": "0.x",
-    "mocha": "3.x"
+    "mocha": "5.x",
+    "should": "13.2.x"
   }
 }

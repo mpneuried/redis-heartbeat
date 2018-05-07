@@ -7,6 +7,7 @@ METRICKEYS = ["t", "g_cpu", "g_mem", "g_memtotal", "p_id", "p_uptime", "p_mem", 
 
 describe "----- Module TESTS -----", ->
 
+
 	describe 'Create Instance', ->
 
 		it "without any options", ( done )->
@@ -15,6 +16,7 @@ describe "----- Module TESTS -----", ->
 				_err.name.should.equal( "ENONAME" )
 				done()
 				_hb.removeAllListeners()
+				_hb.quit()
 				return
 			_hb.start()
 			return
@@ -25,6 +27,7 @@ describe "----- Module TESTS -----", ->
 				_err.name.should.equal( "ENOIDENTIFIER" )
 				done()
 				_hb.removeAllListeners()
+				_hb.quit()
 				return
 			_hb.start()
 			return
@@ -35,6 +38,7 @@ describe "----- Module TESTS -----", ->
 				_err.name.should.equal( "ENONAME" )
 				done()
 				_hb.removeAllListeners()
+				_hb.quit()
 				return
 			_hb.start()
 			return
@@ -69,13 +73,8 @@ describe "----- Module TESTS -----", ->
 				ident.should.equal( _ident )
 				return
 
-			_hb.on "beforeMetric", ( metric )->
-				_cM++
-				metric.should.have.properties( METRICKEYS )
-				return
 			setTimeout( ->
 				_cH.should.be.above( 0 )
-				_cM.should.be.above( 0 )
 				done()
 				return
 			, 10000)
@@ -106,20 +105,14 @@ describe "----- Module TESTS -----", ->
 		it "wait for heartbeats", ( done )->
 			this.timeout( 11000 )
 			_cH = 0
-			_cM = 0
 
 			_hb.on "beforeHeartbeat", ( ident )->
 				_cH++
 				ident.should.equal( _ident )
 				return
 
-			_hb.on "beforeMetric", ( metric )->
-				_cM++
-				metric.should.have.properties( METRICKEYS )
-				return
 			setTimeout( ->
 				_cH.should.be.above( 0 )
-				_cM.should.be.above( 0 )
 				done()
 				return
 			, 10000)

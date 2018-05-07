@@ -13,8 +13,6 @@ services:
   - redis-server
 language: node_js
 node_js:
-  - 0.10
-  - 0.12
   - 4.0
   - 4.4
   - 5.1
@@ -24,8 +22,13 @@ node_js:
   - 6.1
   - 6.11
   - 8.3
-  - iojs
+  - 9
+  - 10
   - node
+  - lts/argon
+	- lts/boron
+	- lts/carbon
+  - lts/*
 install: npm install
 before_script:
   - "npm install -g grunt-cli"

@@ -10,7 +10,6 @@
 #
 # * **started**: 	ted on start of heartbeat.
 # * **beforeHeartbeat**: 	ted before heartbeat. With this event youre able to modify the content of the heartbeat identifier in operation.
-# * **beforeMetric**: 	ted before heartbeat. With this event youre able to modify the content of the metric package.
 
 # **node modules**
 os = require( "os" )
@@ -18,9 +17,6 @@ os = require( "os" )
 # **npm modules**
 _isFunction = require( "lodash/isFunction" )
 _result = require( "lodash/result" )
-if os.platform() isnt "win32"
-	usage = require( "usage" )
-disk = require( "diskusage" )
 
 # **internal modules**
 # [Redisconnector](./redisconnector.coffee.html)
@@ -30,7 +26,7 @@ class Heartbeat extends Redisconnector
 
 	# ## defaults
 	defaults: =>
-		@extend super,
+		@extend super( arguments... ),
 			# **name** *String* A identifier name
 			name: null
 			# **identifier** *String|Function* The heartbeat identifier content as string or function
@@ -42,29 +38,19 @@ class Heartbeat extends Redisconnector
 			heartbeatKey: "HB"
 			# **heartbeatExpire** *Number* Time in seconds until unused heartbeat will automatically removed. If set to `0` the key will never be removed
 			heartbeatExpire: 60*60*24*2
-			# **intervalMetrics** *Number* Interval in seconds to write server metrics to redis. If set `<= 0` no metrics will be written
-			intervalMetrics: 60
-			# **metricsKey** *String* Key prefix for the metrics key. If this is set to `null` no mertics will be written to redis
-			metricsKey: "HB:METRICS"
-			# **metricCount** *Number* Metrics will be saved as redis list. The list will be trimed to this length
-			metricCount: 5000
-			# **metricExpire** *Number* Time in seconds until unused metrict will automatically removed. If set to `0` the key will never be removed
-			metricExpire: 60*60*24*2
 			# **useRedisTime** *Boolean* Use redis server time or us the own time
 			useRedisTime: true
 			# **autostart** *Boolean* Start the heartbeat on init
 			autostart: true
 			# **localtime** *Boolean* Force the module to use the local time instead of a server independent local machine time
 			localtime: false
-			# **diskCheckPath** *String* The disk path to ckeck for free space. If `null` or empty this check will be skipped. More details see [module diskusage](https://www.npmjs.com/package/diskusage)
-			diskCheckPath: if os.platform() is "win32" then "c:" else "/"
 
 
 	###
 	## constructor
 	###
 	constructor: ( options )->
-		super
+		super( arguments... )
 
 		# wrap start method to only be active until the connection is established
 		# This will be the public method
@@ -81,7 +67,7 @@ class Heartbeat extends Redisconnector
 
 	`heartbeat._start()`
 
-	Start the heartbeat and metric send
+	Start the heartbeat send
 
 	@return { Boolean } If it has been started. Could be `false` if the heartbeat has been already active
 
@@ -91,7 +77,7 @@ class Heartbeat extends Redisconnector
 		# don't start a second tine
 		return false if @active
 		@active = true
-
+		
 		if not @config.name?.length
 			@emit "error", @_handleError( true, "ENONAME" )
 			return
@@ -105,18 +91,13 @@ class Heartbeat extends Redisconnector
 			@debug "_start: heartbeat"
 			@_sendHeartbeat = @_send( "heartbeat", @heartbeat )
 
-		if @config.intervalMetrics > 0
-			@debug "_start: metrics"
-			@_sendMetrics = @_send( "metric", @metrics )
-
-		if not @_sendHeartbeat? and not @_sendMetrics?
+		if not @_sendHeartbeat?
 			@active = false
 			@debug "module disabled"
 			return false
 
 		# send the data for the fist time
 		@_sendHeartbeat() if @_sendHeartbeat?
-		@_sendMetrics() if @_sendMetrics?
 
 		@emit "started"
 		return true
@@ -133,7 +114,6 @@ class Heartbeat extends Redisconnector
 	stop: =>
 		@active = false
 		clearTimeout( @_timerHeartbeat ) if @_timerHeartbeat
-		clearTimeout( @_timerMetrics ) if @_timerMetrics
 		return
 
 	###
@@ -188,33 +168,13 @@ class Heartbeat extends Redisconnector
 		return
 
 	###
-	## heartbeat
-
-	`heartbeat.heartbeat( id, cb )`
-
-	send a heartbeat and init the timeout for the next beat
-
-	@api private
-	###
-	metrics: =>
-		return if not @active
-		# silent stop if function not exists or a invalid intervall has been defined
-		if not @_sendMetrics? or @config.intervalMetrics <= 0
-			@debug "metrics: deactivated"
-			return
-
-		clearTimeout( @_timerMetrics ) if @_timerMetrics
-		@_timerMetrics = setTimeout( @_sendMetrics, @config.intervalMetrics * 1000 )
-		return
-
-	###
 	## _send
 
 	`heartbeat._send( [cb] )`
 
 	Write the heartbeat to redis
 
-	@param { String } type The type to send. *( enum: "heartbeat", "metric" )*
+	@param { String } type The type to send. *( enum: "heartbeat" )*
 	@param { Function } next Function called on finish or error
 
 	@return { Self } itself
@@ -257,7 +217,7 @@ class Heartbeat extends Redisconnector
 
 	Generate the heartbeat content
 
-	@param { String } type The type to send. *( enum: "heartbeat", "metric" )*
+	@param { String } type The type to send. *( enum: "heartbeat" )*
 	@param { Object } [options] Optional options.
 	@param { Function } cb Callback function
 
@@ -282,110 +242,12 @@ class Heartbeat extends Redisconnector
 				cb( null, _statements )
 				return
 
-			if type is "metric"
-				@_getUsage (err, _usage)=>
-					if err
-						cb( err )
-						return
-					
-					if not @config.diskCheckPath?.length
-						@_createAndSaveMetricObj( ms, _usage, null, options, cb )
-						return
-						
-					disk.check @config.diskCheckPath, (err, _disk)=>
-						if err
-							cb( err )
-							return
-						
-						@_createAndSaveMetricObj( ms, _usage, _disk, options, cb )
-						return
-					return
-				return
-
 			_err = @_handleError( true, "EINVALIDTYPE" )
 			@emit( "error", _err )
 			cb( _err )
 			return
 		return
-
-	###
-	## _getUsage
-
-	`heartbeat._getUsage( cb )`
-
-	Internal helper to read the process cpu and memory usage if usage is availible.
-	Within Windows System it's not availible.
-
-	@param { Function } cb Callback function
-
-	@api private
-	###
-	_getUsage: ( cb )->
-		if usage?
-			usage.lookup process.pid, (err, _usage)->
-				if err
-					cb( err )
-					return
-				cb( null, _usage )
-				return
-			return
-
-		# in case of a windown machine we can't read the process usage
-		cb( null, null )
-		return
 	
-	###
-	## _createAndSaveMetricObj
-
-	`heartbeat._createAndSaveMetricObj( cb )`
-
-	internal helper method to capulate teh metic obj creation
-
-	@param { Number } current time in ms
-	@param { Object } usage results
-	@param { Object|Null } disk results
-	@param { Object } [options] Optional options.
-	@param { Function } cb Callback function
-
-	@api private
-	###
-	_createAndSaveMetricObj: ( ms, _usage, _disk, options, cb )=>
-		# read the avarge load
-		[ ald1m, ald5m, ald15m ] = os.loadavg()
-		_data =
-			t: ms
-			g_cpu: parseFloat( ald1m.toFixed(2) )
-			g_mem: parseFloat( ( os.freemem() / os.totalmem() * 100).toFixed(2) )
-			g_memtotal: os.totalmem()
-			p_id: process.pid
-			p_uptime: process.uptime()
-			p_mem: _usage?.memory
-			p_cpu: _usage?.cpu
-		
-		_data.d_avail = _disk.available if _disk?
-		
-		@emit "beforeMetric", _data
-		
-		# exit silent if no metricsKey was defined
-		if not @config.metricsKey
-			cb( null, null )
-			return
-		
-		_statements = []
-		_iden = _result( @config, "identifier" )
-		_key = @_getKey( _iden, @config.metricsKey )
-			
-		_sData = JSON.stringify( _data )
-		_statements.push [ "LPUSH", _key, _sData ]
-		_statements.push [ "ZADD", @_getKey( null, @config.metricsKey ), ms, _key ]
-		_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
-		_statements.push [ "LTRIM", _key, 0, @config.metricCount - 1 ]
-
-		if @config.metricExpire > 0
-			_statements.push [ "EXPIRE", _key, @config.metricExpire ]
-
-		cb( null, _statements )
-		return
 	###
 	## _getTime
 
@@ -445,10 +307,10 @@ class Heartbeat extends Redisconnector
 	@api private
 	###
 	ERRORS: =>
-		return @extend {}, super,
+		return @extend {}, super( arguments... ),
 			"ENONAME": [ 500, "No `name` defined. The heartbeat will not be send" ]
 			"ENOIDENTIFIER": [ 500, "No `identifier` defined. The heartbeat will not be send" ]
-			"EINVALIDTYPE": [ 500, "Invalid type. Only `heartbeat` and `metrics` are allowed" ]
+			"EINVALIDTYPE": [ 500, "Invalid type. Only `heartbeat` is allowed" ]
 
 #export this class
 module.exports = Heartbeat

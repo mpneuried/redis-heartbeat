@@ -11,6 +11,10 @@ redis-heartbeat
 
 Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems.
 
+## Breaking changes
+
+**Version `1.0.0`** Since this version th emetrics are removed, to be able to install it for node 10.
+
 ## Install
 
 ```
@@ -34,10 +38,6 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 - **intervalHeartbeat** : *( `Number` optional: default = `5` )* Min. interval time ( in seconds ) to send the heartbeat. If set `<= 0` the heartbeat will be deactivated.
 - **heartbeatKey** : *( `String` optional: default = `HB` )* Redis key to write the heartbeat. This could be prefixed by `redisprefix`.
 - **heartbeatExpire** : *( `Number` optional: default = `172800` 2 days )* Time in seconds until unused heartbeat will automatically removed. If set to `0` the key will never be removed
-- **intervalMetrics** : *( `Number` optional: default = `60` )* Min. interval time ( in seconds ) to send the metrics. If set `<= 0` no metrics will be written
-- **metricsKey** : *( `String` optional: default = `HB:METRICS` )* Redis key to write the machine/process metrics. If this is set to `null` no mertics will be written to redis. This could be prefixed by `redisprefix`.
-- **metricCount** : *( `Number` optional: default = `5000` )* Metrics will be saved as redis list. The list will be trimed to this length.
-- **metricExpire** : *( `Number` optional: default = `172800` 2 days )* Time in seconds until unused metric will automatically removed. If set to `0` the key will never be removed
 - **useRedisTime** : *( `Boolean` optional: default = `true` )* Use redis server time or us the own machine time
 - **autostart** : *( `Boolean` optional: default = `true` )* Start the heartbeat on int. Otherwise you have to call the method `.start()` of your instance.
 - **localtime** : *( `Boolean` optional: default = `false` )* Force the module to use the local time instead of a server independent local machine time
@@ -90,26 +90,6 @@ With this event it's possible to change the heartbeat content in operation
 
 - **identifier** : *( `String` )* The current identifier
 
-#### `beforeMetric`
-
-Emitted before metric write.
-With this event it's possible to change the heartbeat content in operation
-
-**Arguments**
-
-- **metric** : *( `Object` )* The current machine/process metrics
-	- **metric.g_cpu** : *( `Number` )* The average machine cpu usage for the last minute in percent
-	- **metric.g_mem** : *( `Number` )* The current machine memory usage in percent.
-	- **metric.g_memtotal** : *( `Number` )* The current machine memory usage in bytes.
-	- **metric.p_id** : *( `Number` )* The current process id.
-	- **metric.p_uptime** : *( `Number` )* The current process uptime in seconds.
-	- **metric.p_cpu** : *( `Number` )* The current cpu usage of the node process.
-	- **metric.p_mem** : *( `Object` )* The current machine memory usage of the process.
-		- **metric.p_mem.heapTotal** : *( `Number` )* The current total heap in bytes.
-		- **metric.p_mem.heapUsed** : *( `Number` )* The current used heap in bytes.
-		- **metric.p_mem.rss** : *( `Number` )* The current ram usage in bytes.
-	- **metric.d_avail** : *( `Number` )* The available disk space in bytes.
-
 #### `connected`
 
 Emitted on connection to redis
@@ -132,12 +112,12 @@ Emitted on general redis error
 
 ## TODO
 
-* add free disk space to metrics
 * add content tests
 
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|1.0.0|2018-05-07|removed metric, to use the heartbeat from node 10|
 |0.3.1|2017-09-05|fixed compiled files|
 |0.3.0|2017-08-11|be able to disable heartbeat with `intervalHeartbeat = 0`; updated deps; added coverage report|
 |0.2.1|2016-05-19|optimized tests and event handling on quit|
