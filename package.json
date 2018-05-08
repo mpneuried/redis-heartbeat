@@ -16,7 +16,7 @@
     "url": "https://github.com/mpneuried/redis-heartbeat.git"
   },
   "scripts": {
-    "test": "COFFEECOV_INIT_ALL=false mocha --compilers coffee:coffee-script/register --require coffee-coverage/register-istanbul _src/test/main.coffee -R spec",
+    "test": "COFFEECOV_INIT_ALL=false mocha --compilers coffee:coffeescript/register --require coffee-coverage/register-istanbul _src/test/main.coffee -R spec",
     "test-docker": "SILIENT_MODE=1 mocha test/main.js -R min",
     "build": "grunt build"
   },
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "coffee-coverage": "3.x",
-    "coffee-script": "1.x",
+    "coffeescript": "2.x",
     "coveralls": "3.x",
     "grunt": "^1.0.2",
     "grunt-contrib-clean": "1.1.x",
