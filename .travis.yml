@@ -19,7 +19,6 @@ node_js:
   - 9
   - 10
   - node
-  - lts/argon
   - lts/boron
   - lts/carbon
   - lts/*
