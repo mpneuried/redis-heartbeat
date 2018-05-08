@@ -21,7 +21,7 @@
     "build": "grunt build"
   },
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 6.0.0"
   },
   "license": "MIT",
   "dependencies": {

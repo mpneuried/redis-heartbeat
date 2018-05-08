@@ -13,7 +13,9 @@ Pulse a heartbeat to redis. This can be used to detach or attach servers to ngin
 
 ## Breaking changes
 
-**Version `1.0.0`** Since this version th emetrics are removed, to be able to install it for node 10.
+**Version `1.0.0`**
+- Since this version the metrics are removed, to be able to install it for node 10.
+- Because of the use of coffee-script 2, also dropped support for node version `< 6`
 
 ## Install
 
