@@ -27,7 +27,6 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # Typical npm stuff. Use msvs 2013 for the hiredis parser
   - npm install
-  - npm install hiredis --msvs_version=2013
   - npm install -g grunt-cli mocha
   - grunt build
 
